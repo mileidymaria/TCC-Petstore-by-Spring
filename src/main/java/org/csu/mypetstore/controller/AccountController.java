@@ -1,6 +1,11 @@
 package org.csu.mypetstore.controller;
 
 
+import org.csu.mypetstore.common.Action;
+import org.csu.mypetstore.common.Filter;
+import org.csu.mypetstore.common.Observable;
+import org.csu.mypetstore.common.Observer;
+import org.csu.mypetstore.common.factory.ServiceFactory;
 import org.csu.mypetstore.service.AccountService;
 import org.csu.mypetstore.service.CatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,21 +15,31 @@ import org.springframework.web.bind.annotation.*;
 import org.csu.mypetstore.domain.Account;
 import org.csu.mypetstore.domain.Product;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 @Controller
 @RequestMapping("account")
 @SessionAttributes({"account", "myList", "authenticated"})
-public class Accountcontroller {
-    @Autowired
-    private AccountService accountService;
+public class AccountController extends Observable {
 
     @Autowired
+    private ServiceFactory serviceFactory;
     private CatalogService catalogService;
+    private AccountService accountService;
+
 
     private static final List<String> LANGUAGE_LIST;
     private static final List<String> CATEGORY_LIST;
+
+    public AccountController(ServiceFactory serviceFactory){
+        this.serviceFactory = serviceFactory;
+        this.catalogService = serviceFactory.createCatalogService();
+        this.accountService = serviceFactory.createAccountService();
+        this.addObserver(Filter.CATALOG, Arrays.asList(catalogService));
+        this.addObserver(Filter.ACCCOUNT, Arrays.asList(accountService));
+    }
 
     static {
         List<String> langList = new ArrayList<String>();
@@ -98,8 +113,9 @@ public class Accountcontroller {
             account=null;
             return "account/edit_account";
         } else {
-            accountService.updateAccount(account);
+            notifyObservers(account, Action.UPDATE, Filter.ACCCOUNT);
             account = accountService.getAccount(account.getUsername());
+            System.out.println(account);
             List<Product> myList = catalogService.getProductListByCategory(account.getFavouriteCategoryId());
             boolean authenticated = true;
             model.addAttribute("account", account);
@@ -160,8 +176,8 @@ public class Accountcontroller {
             model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);
             return "account/new_account";
         } else {
-            accountService.insertAccount(account);
-            account = accountService.getAccount(account.getUsername());
+            notifyObservers(account, Action.CREATE, Filter.ACCCOUNT);
+            account = accountService.getAccount(account.getUsername(), account.getPassword());
             List<Product> myList = catalogService.getProductListByCategory(account.getFavouriteCategoryId());
             boolean authenticated = true;
             model.addAttribute("account", account);

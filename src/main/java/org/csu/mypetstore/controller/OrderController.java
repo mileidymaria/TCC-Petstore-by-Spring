@@ -1,34 +1,45 @@
 package org.csu.mypetstore.controller;
 
+import org.csu.mypetstore.common.Action;
+import org.csu.mypetstore.common.Filter;
+import org.csu.mypetstore.common.Observable;
 import org.csu.mypetstore.domain.Account;
 import org.csu.mypetstore.domain.Cart;
 import org.csu.mypetstore.domain.Order;
+import org.csu.mypetstore.common.factory.ServiceFactory;
 import org.csu.mypetstore.service.AccountService;
 import org.csu.mypetstore.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 @Controller
 @RequestMapping("order")
 @SessionAttributes({"account","authenticated","myList","order"})
-public class OrderController {
+public class OrderController extends Observable {
     @Autowired
+    private ServiceFactory serviceFactory;
     private OrderService orderService;
     @Autowired
     private Order order;
-    @Autowired
     private AccountService accountService;
     @Autowired
     private Cart cart;
 
+    public OrderController (ServiceFactory serviceFactory){
+        this.serviceFactory = serviceFactory;
+        this.orderService = this.serviceFactory.createOrderService();
+        this.accountService = this.serviceFactory.createAccountService();
+        this.addObserver(Filter.ORDER, Arrays.asList(orderService));
+        this.addObserver(Filter.ACCCOUNT, Arrays.asList(accountService));
+    }
 
     private boolean confirmed;
     private boolean shippingAddressRequired;
@@ -44,7 +55,7 @@ public class OrderController {
     public  String viewOrder(Order order,Model model){
 //        order = orderService.getOrder(order.getOrderId());
         if(accountService.getAccount(order.getUsername()).getUsername().equals(order.getUsername())){
-            orderService.insertOrder(order);
+            notifyObservers(order, Action.UPDATE, Filter.ORDER);
             model.addAttribute("msg","Thank you, your order has been submitted.");
 
             return "order/ViewOrder";
@@ -65,9 +76,8 @@ public class OrderController {
             model.addAttribute("order",order);
             return "order/ConfirmOrder";
         }else if(order != null){
-            orderService.insertOrder(order);
+            notifyObservers(order, Action.UPDATE, Filter.ORDER);
             model.addAttribute("msg","Thank you, your order has been submitted.");
-
             return "order/ViewOrder";
         }else{
             model.addAttribute("msg","An error occurred processing your order (order was null).");

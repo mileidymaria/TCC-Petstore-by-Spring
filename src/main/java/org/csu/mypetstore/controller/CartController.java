@@ -1,6 +1,10 @@
 package org.csu.mypetstore.controller;
 
+import org.csu.mypetstore.common.Action;
+import org.csu.mypetstore.common.Filter;
+import org.csu.mypetstore.common.Observable;
 import org.csu.mypetstore.domain.*;
+import org.csu.mypetstore.common.factory.ServiceFactory;
 import org.csu.mypetstore.service.CatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,8 +19,10 @@ import java.util.*;
 @SessionScope
 @SessionAttributes({"account","authenticated","myList","order"})
 @RequestMapping("cart")
-public class Cartcontroller {
+public class CartController extends Observable {
+
     @Autowired
+    private ServiceFactory serviceFactory;
     private CatalogService catalogService;
     @Autowired
     private Cart cart;
@@ -25,6 +31,12 @@ public class Cartcontroller {
 
     private boolean confirmed;
     private boolean shippingAddressRequired;
+
+    public CartController (ServiceFactory serviceFactory){
+        this.serviceFactory = serviceFactory;
+        this.catalogService = this.serviceFactory.createCatalogService();
+        this.addObserver(Filter.CATALOG, Arrays.asList(catalogService));
+    }
     private static final List<String> CARD_TYPE_LIST;
     static {
         List<String>cardList = new ArrayList<String>();
@@ -102,7 +114,11 @@ public class Cartcontroller {
         {
             CartItem cartItem = cartItems.next();
             String itemId = cartItem.getItem().getItemId();
-            catalogService.updateInventoryQuantity(itemId,cartItem.getQuantity());
+            Map<String, String> argument = new HashMap<String, String>(2);
+            argument.put("itemId", itemId);
+            argument.put("quantity", String.valueOf(cartItem.getQuantity()));
+            notifyObservers(argument, Action.UPDATE, Filter.CATALOG);
+//            catalogService.update(argument, Action.UPDATE);
             Item item = cart.removeItemById(itemId);
             model.addAttribute("cart",cart);
             if(item == null){
