@@ -1,4 +1,4 @@
-package org.csu.mypetstore.persistence;
+package org.csu.mypetstore.persistence.mapper;
 
 import org.csu.mypetstore.domain.Sequence;
 import org.springframework.stereotype.Repository;

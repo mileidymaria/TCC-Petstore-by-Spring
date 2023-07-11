@@ -2,7 +2,7 @@ package org.csu.mypetstore.service.impl;
 
 import org.csu.mypetstore.common.Action;
 import org.csu.mypetstore.domain.Account;
-import org.csu.mypetstore.persistence.AccountMapper;
+import org.csu.mypetstore.persistence.mapper.AccountMapper;
 import org.csu.mypetstore.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,10 +21,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account getAccount(String username, String password){
-        Account account = new Account();
-        account.setUsername(username);
-        account.setPassword(password);
-        return accountMapper.getAccountByUsernameAndPassword(account);
+        return accountMapper.getAccountByUsernameAndPassword(new Account(username, password));
     }
 
     /*

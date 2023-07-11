@@ -20,9 +20,7 @@ import java.util.*;
 @SessionAttributes({"account","authenticated","myList","order"})
 @RequestMapping("cart")
 public class CartController extends Observable {
-
     @Autowired
-    private ServiceFactory serviceFactory;
     private CatalogService catalogService;
     @Autowired
     private Cart cart;
@@ -32,9 +30,8 @@ public class CartController extends Observable {
     private boolean confirmed;
     private boolean shippingAddressRequired;
 
-    public CartController (ServiceFactory serviceFactory){
-        this.serviceFactory = serviceFactory;
-        this.catalogService = this.serviceFactory.createCatalogService();
+    public CartController (CatalogService catalogService){
+        this.catalogService = catalogService;
         this.addObserver(Filter.CATALOG, Arrays.asList(catalogService));
     }
     private static final List<String> CARD_TYPE_LIST;
@@ -48,51 +45,34 @@ public class CartController extends Observable {
 
     @GetMapping("viewCart")
     public String viewCart(Model model){
-        model.addAttribute("cart",cart);
+        model.addAttribute("cart", cart);
         return "cart/cart";
     }
 
     @GetMapping("addItemToCart")
     public String addItemToCart(String workingItemId, Model model){
-        if(cart.containsItemId(workingItemId)){
-            cart.incrementQuantityByItemId(workingItemId);
-        }else{
-            boolean isInStock = catalogService.isItemInStock(workingItemId);
-            Item item = catalogService.getItem(workingItemId);
-            cart.addItem(item,isInStock);
-        }
-        model.addAttribute("cart",cart);
+        boolean isInStock = catalogService.isItemInStock(workingItemId);
+        Item item = catalogService.getItem(workingItemId);
+        cart.addItem(item, isInStock, workingItemId);
+        model.addAttribute("cart", cart);
         return "cart/cart";
     }
 
     @GetMapping("removeItemFromCart")
     public String removeItemFromCart(String workingItemId, Model model){
-        Item item = cart.removeItemById(workingItemId);
-        model.addAttribute("cart",cart);
-        if(item == null){
+        try {
+            cart.removeItemById(workingItemId);
+            model.addAttribute("cart", cart);
+            return "cart/cart";
+        } catch (Exception exception){
             model.addAttribute("msg", "Attempted to remove null CartItem from Cart.");
             return "common/error";
-        }else{
-            return "cart/cart";
         }
     }
 
     @PostMapping("updateCartQuantities")
     public String updateCartQuantities(HttpServletRequest request, Model model){
-        Iterator<CartItem> cartItems = cart.getAllCartItems();
-        while (cartItems.hasNext()){
-            CartItem cartItem = cartItems.next();
-            String itemId = cartItem.getItem().getItemId();
-            try{
-                int quantity = Integer.parseInt(request.getParameter(itemId));
-                cart.setQuantityByItemId(itemId,quantity);
-                if(quantity < 1){
-                    cartItems.remove();
-                }
-            }catch (Exception e){
-
-            }
-        }
+        cart.updateCardQuantities(request);
         model.addAttribute("cart",cart);
         return "cart/cart";
     }
@@ -109,16 +89,13 @@ public class CartController extends Observable {
             order.initOrder(account,cart);
             model.addAttribute("order",order);
         }
-        Iterator<CartItem> cartItems = cart.getAllCartItems();
-        while (cartItems.hasNext())
-        {
-            CartItem cartItem = cartItems.next();
+        Collection<CartItem> cartItems = cart.getAllCartItems();
+        for (CartItem cartItem : cartItems) {
             String itemId = cartItem.getItem().getItemId();
             Map<String, String> argument = new HashMap<String, String>(2);
             argument.put("itemId", itemId);
             argument.put("quantity", String.valueOf(cartItem.getQuantity()));
             notifyObservers(argument, Action.UPDATE, Filter.CATALOG);
-//            catalogService.update(argument, Action.UPDATE);
             Item item = cart.removeItemById(itemId);
             model.addAttribute("cart",cart);
             if(item == null){

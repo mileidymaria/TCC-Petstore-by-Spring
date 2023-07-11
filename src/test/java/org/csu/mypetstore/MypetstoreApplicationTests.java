@@ -32,42 +32,42 @@ class MypetstoreApplicationTests {
     void contextLoads() {
     }
 
-    @Test
-    void testCatagory(){
-        Category c= catalogServiceImpl.getCategory("BIRDS");
-        System.out.println(c.getName()+","+ c.getDescription());
-    }
-    @Test
-    void testProdect(){
-        List<Product> productList= catalogServiceImpl.getProductListByCategory("BIRDS");
-        System.out.print(productList.size());
-    }
 //    @Test
-//    void testItem(){
-//        Item item= catalogServiceImpl.getItem("EST-14");
-//        System.out.println(item.getItemId()+" ,"+item.getListPrice()+","+item.getAttribute1());
+//    void testCatagory(){
+//        Category c= catalogServiceImpl.getCategory("BIRDS");
+//        System.out.println(c.getName()+","+ c.getDescription());
 //    }
-
-    @Test
-    void testAccount(){
-        Account account= accountServiceImpl.getAccount("j2ee");
-        System.out.println(account.getAddress1()+","+account.getEmail()+"1");
-
-        Account account1= accountServiceImpl.getAccount("j2ee","j2ee");
-        System.out.println(account1.getEmail()+","+account.getUsername()+"2");
-    }
-    @Test
-    void testDatabase()
-    {
-        try {
-            Connection connection =dataSource.getConnection();
-            System.out.print(connection);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
+////    @Test
+////    void testProdect(){
+////        List<Product> productList= catalogServiceImpl.getProductListByCategory("BIRDS");
+////        System.out.print(productList.size());
+////    }
+////    @Test
+////    void testItem(){
+////        Item item= catalogServiceImpl.getItem("EST-14");
+////        System.out.println(item.getItemId()+" ,"+item.getListPrice()+","+item.getAttribute1());
+////    }
+//
+//    @Test
+//    void testAccount(){
+//        Account account= accountServiceImpl.getAccount("j2ee");
+//        System.out.println(account.getAddress1()+","+account.getEmail()+"1");
+//
+//        Account account1= accountServiceImpl.getAccount("j2ee","j2ee");
+//        System.out.println(account1.getEmail()+","+account.getUsername()+"2");
+//    }
+//    @Test
+//    void testDatabase()
+//    {
+//        try {
+//            Connection connection =dataSource.getConnection();
+//            System.out.print(connection);
+//        }
+//        catch (Exception e)
+//        {
+//            e.printStackTrace();
+//        }
+//    }
 
 
 

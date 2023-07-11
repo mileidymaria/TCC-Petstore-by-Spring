@@ -4,9 +4,7 @@ import org.csu.mypetstore.common.Action;
 import org.csu.mypetstore.domain.Category;
 import org.csu.mypetstore.domain.Item;
 import org.csu.mypetstore.domain.Product;
-import org.csu.mypetstore.persistence.CategoryMapper;
-import org.csu.mypetstore.persistence.ItemMapper;
-import org.csu.mypetstore.persistence.ProductMapper;
+import org.csu.mypetstore.persistence.CatalogRepository;
 import org.csu.mypetstore.service.CatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,60 +15,50 @@ import java.util.Map;
 @Service
 public class CatalogServiceImpl implements CatalogService {
     @Autowired
-    private CategoryMapper categoryMapper;
-
-    @Autowired
-    private ProductMapper productMapper;
-
-    @Autowired
-    private ItemMapper itemMapper;
+    private CatalogRepository catalogRepository;
 
     @Override
     public Category getCategory(String categoryId) {
-        return categoryMapper.getCategory(categoryId);
-    }
-
-    @Override
-    public List<Category> getCategoryList() {
-        return categoryMapper.getCategoryList();
+        return catalogRepository.getCategory(categoryId);
     }
 
     @Override
     public Product getProduct(String productId) {
-        return productMapper.getProduct(productId);
+        return catalogRepository.getProduct(productId);
     }
 
     @Override
-    public List<Product> getProductListByCategory(String categoryId) {
-        return productMapper.getProductListByCategory(categoryId);
+    public List<Product> getProductList(String categoryId) {
+        return catalogRepository.getProductList(categoryId);
+    }
+
+    @Override
+    public Map<String, Object> getProductListByCategory (String categoryId) {
+        return catalogRepository.getProductListByCategory(categoryId);
     }
 
     @Override
     public List<Product> searchProductList(String keyword) {
-        return productMapper.searchProductList("%" + keyword.toLowerCase() + "%");
+        return catalogRepository.searchProductList("%" + keyword.toLowerCase() + "%");
     }
 
     @Override
     public List<Item> getItemListByProduct(String productId){
-        return itemMapper.getItemListByProduct(productId);
+        return catalogRepository.getItemListByProduct(productId);
     }
 
     @Override
     public Item getItem(String itemId){
-        return itemMapper.getItem(itemId);
+        return catalogRepository.getItem(itemId);
     }
 
     @Override
     public boolean isItemInStock(String itemId){
-        return itemMapper.getInventoryQuantity(itemId) > 0;
-    }
-
-    private void updateInventoryQuantity(Map<String, String> item){
-        itemMapper.updateInventoryQuantity(item.get("itemId").toString(), Integer.parseInt(item.get("quantity")));
+        return catalogRepository.isItemInStock(itemId);
     }
 
     @Override
     public void update(Map<String, String> argument, Action action) {
-        updateInventoryQuantity(argument);
+       catalogRepository.updateInventoryQuantity(argument);
     }
 }

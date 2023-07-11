@@ -25,6 +25,20 @@ public class Account implements Serializable {
     private boolean bannerOption;
     private String bannerName;
 
+    public Account(){}
+
+    public Account(String username, String password){
+        this.username = username;
+        this.password = password;
+    }
+
+    public boolean passwordVerification(String repeatedPassword){
+        return this.getPassword() == null
+                || this.getPassword().length() == 0
+                || repeatedPassword == null
+                || repeatedPassword.length() == 0;
+    }
+
     public String getUsername() {
         return username;
     }

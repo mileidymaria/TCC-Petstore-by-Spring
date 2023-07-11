@@ -3,10 +3,8 @@ package org.csu.mypetstore.domain;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
 @Component
 public class Order {
     private int orderId;
@@ -282,17 +280,17 @@ public class Order {
         courier = "UPS";
         locale = "CA";
         status = "p";
-        Iterator<CartItem> i = cart.getAllCartItems();
-        while(i.hasNext()){
-            CartItem cartItem = (CartItem)i.next();
+        Collection<CartItem> i = cart.getAllCartItems();
+        for (CartItem cartItem: i){
             addLineItem(cartItem);
         }
     }
-    public void addLineItem(CartItem cartItem){
+    private void addLineItem(CartItem cartItem){
+
         LineItem lineItem = new LineItem(lineItems.size() + 1,cartItem);
         addLineItem(lineItem);
     }
-    public  void addLineItem(LineItem lineItem){
+    private  void addLineItem(LineItem lineItem){
         lineItems.add(lineItem);
     }
 

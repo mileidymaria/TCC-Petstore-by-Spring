@@ -2,6 +2,7 @@ package org.csu.mypetstore.domain;
 
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
@@ -12,27 +13,19 @@ public class Cart implements Serializable {
     private final Map<String, CartItem> itemMap = Collections.synchronizedMap(new HashMap<String, CartItem>());
     private final List<CartItem> itemList = new ArrayList<CartItem>();
 
-    public Iterator<CartItem> getCartItems() {
-        return itemList.iterator();
-    }
-
-    public List<CartItem> getCartItemList() {
-        return itemList;
-    }
-
-    public int getNumberOfItems() {
-        return itemList.size();
-    }
-
-    public Iterator<CartItem> getAllCartItems() {
-        return itemList.iterator();
+    public Collection<CartItem> getAllCartItems() {
+        return itemMap.values();
     }
 
     public boolean containsItemId(String itemId) {
         return itemMap.containsKey(itemId);
     }
 
-    public void addItem(Item item, boolean isInStock) {
+    public void addItem(Item item, boolean isInStock, String workingItemId) {
+        if(containsItemId(workingItemId)){
+            incrementQuantityByItemId(workingItemId);
+            return;
+        }
         CartItem cartItem = (CartItem) itemMap.get(item.getItemId());
         if (cartItem == null) {
             cartItem = new CartItem();
@@ -48,7 +41,7 @@ public class Cart implements Serializable {
     public Item removeItemById(String itemId) {
         CartItem cartItem = (CartItem) itemMap.remove(itemId);
         if (cartItem == null) {
-            return null;
+            throw new RuntimeException("Item not found");
         } else {
             itemList.remove(cartItem);
             return cartItem.getItem();
@@ -56,26 +49,39 @@ public class Cart implements Serializable {
     }
 
     public void incrementQuantityByItemId(String itemId) {
-        CartItem cartItem = (CartItem) itemMap.get(itemId);
-        cartItem.incrementQuantity();
+        itemMap.get(itemId).incrementQuantity();
     }
 
     public void setQuantityByItemId(String itemId, int quantity) {
-        CartItem cartItem = (CartItem) itemMap.get(itemId);
-        cartItem.setQuantity(quantity);
+        itemMap.get(itemId).setQuantity(quantity);
     }
 
     public BigDecimal getSubTotal() {
         BigDecimal subTotal = new BigDecimal("0");
-        Iterator<CartItem> items = getAllCartItems();
-        while (items.hasNext()) {
-            CartItem cartItem = (CartItem) items.next();
-            Item item = cartItem.getItem();
-            BigDecimal listPrice = item.getListPrice();
-            BigDecimal quantity = new BigDecimal(String.valueOf(cartItem.getQuantity()));
+        Collection<CartItem> items = getAllCartItems();
+        for (CartItem cartItem: items) {
+            BigDecimal listPrice = cartItem.getItem().getListPrice();
+            BigDecimal quantity = new BigDecimal(cartItem.getQuantity());
             subTotal = subTotal.add(listPrice.multiply(quantity));
         }
         return subTotal;
+    }
+
+    public void updateCardQuantities(HttpServletRequest request){
+        Iterator<CartItem> cartItems = getAllCartItems().iterator();
+        while (cartItems.hasNext()){
+            CartItem cartItem = cartItems.next();
+            String itemId = cartItem.getItem().getItemId();
+            try{
+                int quantity = Integer.parseInt(request.getParameter(itemId));
+                setQuantityByItemId(itemId,quantity);
+                if(quantity < 1){
+                    cartItems.remove();
+                }
+            }catch (Exception e){
+                System.out.println("Error!");
+            }
+        }
     }
 
 }

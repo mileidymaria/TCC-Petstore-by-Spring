@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 //import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.csu.mypetstore.domain.Item;
@@ -22,13 +23,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @RequestMapping("catalog")
 public class CatalogController {
+
     @Autowired
-    private ServiceFactory serviceFactory;
     private CatalogService catalogService;
 
-    public CatalogController (ServiceFactory serviceFactory){
-        this.serviceFactory = serviceFactory;
-        this.catalogService = this.serviceFactory.createCatalogService();
+    public CatalogController (CatalogService catalogService){
+        this.catalogService = catalogService;
     }
 
     @GetMapping("view")
@@ -39,10 +39,9 @@ public class CatalogController {
     @GetMapping("viewCategory")
     public String viewCategory(String categoryId, Model model) {
         if (categoryId != null) {
-            List<Product> productList = catalogService.getProductListByCategory(categoryId);
-            Category category = catalogService.getCategory(categoryId);
-            model.addAttribute("productList", productList);
-            model.addAttribute("category", category);
+            Map<String, Object> productListByCategory = catalogService.getProductListByCategory(categoryId);
+            model.addAttribute("productList", productListByCategory.get("productList"));
+            model.addAttribute("category", productListByCategory.get("category"));
         }
         return "catalog/category";
     }

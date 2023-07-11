@@ -1,7 +1,5 @@
-package org.csu.mypetstore.service;
+package org.csu.mypetstore.persistence;
 
-import org.csu.mypetstore.common.Action;
-import org.csu.mypetstore.common.Observer;
 import org.csu.mypetstore.domain.Category;
 import org.csu.mypetstore.domain.Item;
 import org.csu.mypetstore.domain.Product;
@@ -9,7 +7,7 @@ import org.csu.mypetstore.domain.Product;
 import java.util.List;
 import java.util.Map;
 
-public interface CatalogService extends Observer<Map<String, String>, Action> {
+public interface CatalogRepository {
     Category getCategory(String categoryId);
 
     Product getProduct(String productId);
@@ -25,4 +23,6 @@ public interface CatalogService extends Observer<Map<String, String>, Action> {
     Item getItem(String itemId);
 
     boolean isItemInStock(String itemId);
+
+    void updateInventoryQuantity(Map<String, String> item);
 }

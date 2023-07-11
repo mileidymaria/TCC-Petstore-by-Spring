@@ -24,21 +24,18 @@ import java.util.List;
 @RequestMapping("order")
 @SessionAttributes({"account","authenticated","myList","order"})
 public class OrderController extends Observable {
+
     @Autowired
-    private ServiceFactory serviceFactory;
     private OrderService orderService;
     @Autowired
     private Order order;
+    @Autowired
     private AccountService accountService;
     @Autowired
     private Cart cart;
 
-    public OrderController (ServiceFactory serviceFactory){
-        this.serviceFactory = serviceFactory;
-        this.orderService = this.serviceFactory.createOrderService();
-        this.accountService = this.serviceFactory.createAccountService();
-        this.addObserver(Filter.ORDER, Arrays.asList(orderService));
-        this.addObserver(Filter.ACCCOUNT, Arrays.asList(accountService));
+    public OrderController (){
+        this.addObserver(Filter.ORDER, Arrays.asList(this.orderService));
     }
 
     private boolean confirmed;
@@ -52,38 +49,33 @@ public class OrderController extends Observable {
         CARD_TYPE_LIST = Collections.unmodifiableList(cardList);
     }
     @GetMapping("viewOrder")
-    public  String viewOrder(Order order,Model model){
-//        order = orderService.getOrder(order.getOrderId());
+    public  String viewOrder(Order order, Model model){
         if(accountService.getAccount(order.getUsername()).getUsername().equals(order.getUsername())){
             notifyObservers(order, Action.UPDATE, Filter.ORDER);
             model.addAttribute("msg","Thank you, your order has been submitted.");
-
             return "order/ViewOrder";
-        }else{
-            order = null;
-            model.addAttribute("msg","you may only view your own orders.");
-            return "common/error";
         }
+        model.addAttribute("msg","you may only view your own orders.");
+        return "common/error";
     }
     @RequestMapping("confirm")
     public String newOrder(HttpServletRequest request, Model model){
-        String a = request.getParameter("shippingAddressRequired");
-        if(a != null){
+        if(request.getParameter("shippingAddressRequired") != null){
             shippingAddressRequired = false;
-            model.addAttribute("order",order);
+            model.addAttribute("order", order);
             return "order/ShippingForm";
-        }else if(!confirmed){
-            model.addAttribute("order",order);
+        }
+        if(!confirmed){
+            model.addAttribute("order", order);
             return "order/ConfirmOrder";
-        }else if(order != null){
+        }
+        if(order != null){
             notifyObservers(order, Action.UPDATE, Filter.ORDER);
             model.addAttribute("msg","Thank you, your order has been submitted.");
             return "order/ViewOrder";
-        }else{
-            model.addAttribute("msg","An error occurred processing your order (order was null).");
-            return "common/error";
         }
-
+        model.addAttribute("msg","An error occurred processing your order (order was null).");
+        return "common/error";
     }
     @RequestMapping("newOrderForm")
     public String newOrderForm( Account account,@ModelAttribute("authenticated")boolean authenticated, Model model){
@@ -97,7 +89,6 @@ public class OrderController extends Observable {
         else{
             model.addAttribute("msg","An order could not be created because a cart could not be found.");
             return "common/error";
-            //aaa
         }
     }
     @GetMapping("listOrders")

@@ -6,9 +6,9 @@ import org.csu.mypetstore.service.OrderService;
 
 public interface ServiceFactory {
 
-    CatalogService createCatalogService();
-
-    AccountService createAccountService();
-
-    OrderService createOrderService();
+//    CatalogService createCatalogService();
+//
+//    AccountService createAccountService();
+//
+//    OrderService createOrderService();
 }
