@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.csu.mypetstore.persistence.AccountMapper">
+<mapper namespace="org.csu.mypetstore.persistence.mapper.AccountMapper">
 
     <select id="getAccountByUsername" parameterType="string" resultType="Account">
         SELECT

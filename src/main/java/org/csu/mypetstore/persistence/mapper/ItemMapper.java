@@ -1,10 +1,9 @@
-package org.csu.mypetstore.persistence;
+package org.csu.mypetstore.persistence.mapper;
 
 import org.csu.mypetstore.domain.Item;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public interface ItemMapper {

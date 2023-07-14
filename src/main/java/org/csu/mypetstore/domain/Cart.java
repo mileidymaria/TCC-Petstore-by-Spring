@@ -2,6 +2,7 @@ package org.csu.mypetstore.domain;
 
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
@@ -32,8 +33,12 @@ public class Cart implements Serializable {
         return itemMap.containsKey(itemId);
     }
 
-    public void addItem(Item item, boolean isInStock) {
-        CartItem cartItem = (CartItem) itemMap.get(item.getItemId());
+    public void addItem(Item item, boolean isInStock, String workingItemId) {
+        if(containsItemId(workingItemId)){
+            incrementQuantityByItemId(workingItemId);
+            return;
+        }
+        CartItem cartItem = itemMap.get(item.getItemId());
         if (cartItem == null) {
             cartItem = new CartItem();
             cartItem.setItem(item);
@@ -45,10 +50,27 @@ public class Cart implements Serializable {
         cartItem.incrementQuantity();
     }
 
+    public void updateCartQuantities(HttpServletRequest request){
+        Iterator<CartItem> cartItems = getAllCartItems();
+        while (cartItems.hasNext()){
+            CartItem cartItem = cartItems.next();
+            String itemId = cartItem.getItem().getItemId();
+            try{
+                int quantity = Integer.parseInt(request.getParameter(itemId));
+                setQuantityByItemId(itemId,quantity);
+                if(quantity < 1){
+                    cartItems.remove();
+                }
+            }catch (Exception e){
+                System.out.println("Error!");
+            }
+        }
+    }
+
     public Item removeItemById(String itemId) {
-        CartItem cartItem = (CartItem) itemMap.remove(itemId);
+        CartItem cartItem = itemMap.remove(itemId);
         if (cartItem == null) {
-            return null;
+            throw new RuntimeException("Attempted to remove null CartItem from Cart!");
         } else {
             itemList.remove(cartItem);
             return cartItem.getItem();
@@ -56,12 +78,12 @@ public class Cart implements Serializable {
     }
 
     public void incrementQuantityByItemId(String itemId) {
-        CartItem cartItem = (CartItem) itemMap.get(itemId);
+        CartItem cartItem = itemMap.get(itemId);
         cartItem.incrementQuantity();
     }
 
     public void setQuantityByItemId(String itemId, int quantity) {
-        CartItem cartItem = (CartItem) itemMap.get(itemId);
+        CartItem cartItem = itemMap.get(itemId);
         cartItem.setQuantity(quantity);
     }
 
@@ -69,7 +91,7 @@ public class Cart implements Serializable {
         BigDecimal subTotal = new BigDecimal("0");
         Iterator<CartItem> items = getAllCartItems();
         while (items.hasNext()) {
-            CartItem cartItem = (CartItem) items.next();
+            CartItem cartItem = items.next();
             Item item = cartItem.getItem();
             BigDecimal listPrice = item.getListPrice();
             BigDecimal quantity = new BigDecimal(String.valueOf(cartItem.getQuantity()));

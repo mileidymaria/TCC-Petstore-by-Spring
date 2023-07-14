@@ -25,6 +25,14 @@ public class Account implements Serializable {
     private boolean bannerOption;
     private String bannerName;
 
+    public boolean isPasswordValid(String repeatedPassword){
+        return getPassword() == null
+                || getPassword().length() == 0
+                || repeatedPassword == null
+                || repeatedPassword.length() == 0;
+    }
+
+
     public String getUsername() {
         return username;
     }
@@ -70,6 +78,7 @@ public class Account implements Serializable {
     public String getStatus() {
         return status;
     }
+
 
     public void setStatus(String status) {
         this.status = status;

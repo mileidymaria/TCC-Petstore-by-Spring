@@ -254,7 +254,7 @@ public class Order {
     public void setLineItems(List<LineItem> lineItems) {
         this.lineItems = lineItems;
     }
-    public void initOrder(Account account,Cart cart){
+    public void initOrder(Account account, Cart cart){
         username = account.getUsername();
         orderDate = new Date();
         shipToFirstName = account.getFirstName();
@@ -284,7 +284,7 @@ public class Order {
         status = "p";
         Iterator<CartItem> i = cart.getAllCartItems();
         while(i.hasNext()){
-            CartItem cartItem = (CartItem)i.next();
+            CartItem cartItem = i.next();
             addLineItem(cartItem);
         }
     }

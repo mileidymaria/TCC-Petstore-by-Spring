@@ -2,28 +2,18 @@ package org.csu.mypetstore.controller;
 
 import org.csu.mypetstore.domain.Category;
 import org.csu.mypetstore.domain.Product;
+import org.csu.mypetstore.service.CatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.csu.mypetstore.service.CatalogService;
+
 import java.util.List;
 
 //import com.sun.org.apache.xpath.internal.operations.Mod;
-import org.csu.mypetstore.domain.Category;
 import org.csu.mypetstore.domain.Item;
-import org.csu.mypetstore.domain.Product;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.csu.mypetstore.service.CatalogService;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("catalog")

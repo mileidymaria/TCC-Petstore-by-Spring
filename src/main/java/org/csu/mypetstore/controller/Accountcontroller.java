@@ -2,7 +2,6 @@ package org.csu.mypetstore.controller;
 
 
 import org.csu.mypetstore.service.AccountService;
-import org.csu.mypetstore.service.CatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,9 +18,6 @@ import java.util.List;
 public class Accountcontroller {
     @Autowired
     private AccountService accountService;
-
-    @Autowired
-    private CatalogService catalogService;
 
     private static final List<String> LANGUAGE_LIST;
     private static final List<String> CATEGORY_LIST;
@@ -49,31 +45,14 @@ public class Accountcontroller {
 
     @PostMapping("signon")
     public String signon(String username, String password, Model model) {
-        Account account = accountService.getAccount(username, password);
-
-        if (account == null) {
-            String msg = "Invalid username or password.  Signon failed.";
-            model.addAttribute("msg", msg);
-            return "account/signon";
-        } else {
-            account.setPassword(null);
-            List<Product> myList = catalogService.getProductListByCategory(account.getFavouriteCategoryId());
-            boolean authenticated = true;
-            model.addAttribute("account", account);
-            model.addAttribute("myList", myList);
-            model.addAttribute("authenticated", authenticated);
-            return "catalog/main";
-        }
+        return accountService.setupAccount(username, password, model);
     }
 
     @GetMapping("signoff")
     public String signoff(Model model) {
-        Account loginAccount = new Account();
-        List<Product> myList = null;
-        boolean authenticated = false;
-        model.addAttribute("account", loginAccount);
-        model.addAttribute("myList", myList);
-        model.addAttribute("authenticated", authenticated);
+        model.addAttribute("account", new Account());
+        model.addAttribute("myList", null);
+        model.addAttribute("authenticated", false);
         return "catalog/main";
     }
 
@@ -87,7 +66,7 @@ public class Accountcontroller {
 
     @PostMapping("editAccount")
     public String editAccount(Account account, String repeatedPassword, Model model) {
-        if (account.getPassword() == null || account.getPassword().length() == 0 || repeatedPassword == null || repeatedPassword.length() == 0) {
+        if (account.isPasswordValid(repeatedPassword)) {
             String msg = "密码不能为空";
             model.addAttribute("msg", msg);
             account=null;
@@ -98,13 +77,10 @@ public class Accountcontroller {
             account=null;
             return "account/edit_account";
         } else {
-            accountService.updateAccount(account);
-            account = accountService.getAccount(account.getUsername());
-            List<Product> myList = catalogService.getProductListByCategory(account.getFavouriteCategoryId());
-            boolean authenticated = true;
+            List<Product> myList = accountService.editAccount(account);
             model.addAttribute("account", account);
             model.addAttribute("myList", myList);
-            model.addAttribute("authenticated", authenticated);
+            model.addAttribute("authenticated", true);
             return "redirect:/catalog/view";
         }
     }
@@ -118,56 +94,7 @@ public class Accountcontroller {
     }
 
     @PostMapping("newAccount")
-    public String newAccount(Account account,String repeatedPassword,Model model) {
-        if(account.getPassword() == null || account.getPassword().length() == 0 || repeatedPassword == null || repeatedPassword.length() == 0) {
-            String msg = "密码不能为空";
-            model.addAttribute("msg", msg);
-            Account loginAccount = new Account();
-            List<Product> myList = null;
-            boolean authenticated = false;
-            model.addAttribute("account", loginAccount);
-            model.addAttribute("myList", myList);
-            model.addAttribute("authenticated", authenticated);
-            model.addAttribute("newAccount",new Account());
-            model.addAttribute("LANGUAGE_LIST", LANGUAGE_LIST);
-            model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);
-            return "account/new_account";
-        } else if (!account.getPassword().equals(repeatedPassword)) {
-            String msg = "两次密码不一致";
-            model.addAttribute("msg", msg);
-            Account loginAccount = new Account();
-            List<Product> myList = null;
-            boolean authenticated = false;
-            model.addAttribute("account", loginAccount);
-            model.addAttribute("myList", myList);
-            model.addAttribute("authenticated", authenticated);
-            model.addAttribute("newAccount",new Account());
-            model.addAttribute("LANGUAGE_LIST", LANGUAGE_LIST);
-            model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);
-            return "account/new_account";
-        }
-        else if(accountService.getAccount(account.getUsername())!=null){
-            String msg="用户名已经被注册";
-            model.addAttribute("msg", msg);
-            Account loginAccount = new Account();
-            List<Product> myList = null;
-            boolean authenticated = false;
-            model.addAttribute("account", loginAccount);
-            model.addAttribute("myList", myList);
-            model.addAttribute("authenticated", authenticated);
-            model.addAttribute("newAccount",new Account());
-            model.addAttribute("LANGUAGE_LIST", LANGUAGE_LIST);
-            model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);
-            return "account/new_account";
-        } else {
-            accountService.insertAccount(account);
-            account = accountService.getAccount(account.getUsername());
-            List<Product> myList = catalogService.getProductListByCategory(account.getFavouriteCategoryId());
-            boolean authenticated = true;
-            model.addAttribute("account", account);
-            model.addAttribute("myList", myList);
-            model.addAttribute("authenticated", authenticated);
-            return "account/signon";
-        }
+    public String newAccount(Account account, String repeatedPassword, Model model) {
+        return this.accountService.setupAccount(account, repeatedPassword, model);
     }
 }

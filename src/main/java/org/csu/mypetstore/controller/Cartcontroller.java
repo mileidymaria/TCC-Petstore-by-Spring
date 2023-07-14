@@ -1,7 +1,7 @@
 package org.csu.mypetstore.controller;
 
-import org.csu.mypetstore.domain.*;
-import org.csu.mypetstore.service.CatalogService;
+import org.csu.mypetstore.domain.Account;
+import org.csu.mypetstore.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,14 +17,8 @@ import java.util.*;
 @RequestMapping("cart")
 public class Cartcontroller {
     @Autowired
-    private CatalogService catalogService;
-    @Autowired
-    private Cart cart;
-    @Autowired
-    private Order order;
+    private CartService cartService;
 
-    private boolean confirmed;
-    private boolean shippingAddressRequired;
     private static final List<String> CARD_TYPE_LIST;
     static {
         List<String>cardList = new ArrayList<String>();
@@ -36,82 +30,31 @@ public class Cartcontroller {
 
     @GetMapping("viewCart")
     public String viewCart(Model model){
-        model.addAttribute("cart",cart);
-        return "cart/cart";
+        return cartService.viewCart(model);
     }
 
     @GetMapping("addItemToCart")
     public String addItemToCart(String workingItemId, Model model){
-        if(cart.containsItemId(workingItemId)){
-            cart.incrementQuantityByItemId(workingItemId);
-        }else{
-            boolean isInStock = catalogService.isItemInStock(workingItemId);
-            Item item = catalogService.getItem(workingItemId);
-            cart.addItem(item,isInStock);
-        }
-        model.addAttribute("cart",cart);
-        return "cart/cart";
+        return cartService.addItemToCart(workingItemId, model);
     }
 
     @GetMapping("removeItemFromCart")
     public String removeItemFromCart(String workingItemId, Model model){
-        Item item = cart.removeItemById(workingItemId);
-        model.addAttribute("cart",cart);
-        if(item == null){
-            model.addAttribute("msg", "Attempted to remove null CartItem from Cart.");
-            return "common/error";
-        }else{
-            return "cart/cart";
-        }
+        return cartService.removeItemFromCart(workingItemId, model);
     }
 
     @PostMapping("updateCartQuantities")
     public String updateCartQuantities(HttpServletRequest request, Model model){
-        Iterator<CartItem> cartItems = cart.getAllCartItems();
-        while (cartItems.hasNext()){
-            CartItem cartItem = cartItems.next();
-            String itemId = cartItem.getItem().getItemId();
-            try{
-                int quantity = Integer.parseInt(request.getParameter(itemId));
-                cart.setQuantityByItemId(itemId,quantity);
-                if(quantity < 1){
-                    cartItems.remove();
-                }
-            }catch (Exception e){
-
-            }
-        }
-        model.addAttribute("cart",cart);
-        return "cart/cart";
+        return cartService.updateCartQuantities(request, model);
     }
 
     @GetMapping("checkout")
     public String checkout(Model model){
-        model.addAttribute("cart",cart);
-        return "cart/checkout";
+        return cartService.checkout(model);
     }
 
     @GetMapping("success")
-    public String success(Account account,Model model){
-        if(cart!=null){
-            order.initOrder(account,cart);
-            model.addAttribute("order",order);
-        }
-        Iterator<CartItem> cartItems = cart.getAllCartItems();
-        while (cartItems.hasNext())
-        {
-            CartItem cartItem = cartItems.next();
-            String itemId = cartItem.getItem().getItemId();
-            catalogService.updateInventoryQuantity(itemId,cartItem.getQuantity());
-            Item item = cart.removeItemById(itemId);
-            model.addAttribute("cart",cart);
-            if(item == null){
-                model.addAttribute("msg", "Please do it again");
-                return "common/error";
-            }else{
-                return "order/NewOrderForm";
-            }
-        }
-        return "order/NewOrderForm";
+    public String success(Account account, Model model){
+        return cartService.success(account, model);
     }
 }

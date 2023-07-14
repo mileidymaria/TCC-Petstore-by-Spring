@@ -1,44 +1,28 @@
 package org.csu.mypetstore.service;
 
 import org.csu.mypetstore.domain.Account;
-import org.csu.mypetstore.persistence.AccountMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.csu.mypetstore.domain.Product;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
-@Service
-public class AccountService {
+import java.util.List;
 
-    @Autowired
-    private AccountMapper accountMapper;
+public interface AccountService {
+    Account getAccount(String username);
 
-    public Account getAccount(String username){
-        return accountMapper.getAccountByUsername(username);
-    }
+    List<Product> editAccount(Account account);
 
-    public Account getAccount(String username, String password){
-        Account account = new Account();
-        account.setUsername(username);
-        account.setPassword(password);
-        return accountMapper.getAccountByUsernameAndPassword(account);
-    }
+    Account getAccount(String username, String password);
+
+    String setupAccount(String username, String password, Model model);
+
+    String setupAccount(Account account, String repeatedPassword, Model model);
 
     /*
-        声明式事务处理
-     */
+                声明式事务处理
+             */
     @Transactional
-    public void insertAccount(Account account){
-        accountMapper.insertAccount(account);
-        accountMapper.insertProfile(account);
-        accountMapper.insertSignon(account);
-    }
+    void insertAccount(Account account);
 
-    public void updateAccount(Account account){
-        accountMapper.updateAccount(account);
-        accountMapper.updateProfile(account);
-
-        if(account.getPassword() != null && account.getPassword().length() > 0){
-            accountMapper.updateSignon(account);
-        }
-    }
+    void updateAccount(Account account);
 }

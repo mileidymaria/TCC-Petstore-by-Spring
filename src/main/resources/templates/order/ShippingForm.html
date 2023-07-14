@@ -19,7 +19,7 @@
 
 <div id="Catalog">
 
-    <form action="/order/shipping" method="post">
+    <form action="/orderImpl/shipping" method="post">
 
         <table>
 
@@ -35,7 +35,7 @@
 
                 <td>
 
-                    <input type="text" name="shipToFirstName" th:value="${session.order.shipToFirstName}">
+                    <input type="text" name="shipToFirstName" th:value="${session.orderImpl.shipToFirstName}">
 
                 </td>
 
@@ -47,7 +47,7 @@
 
                 <td>
 
-                    <input type="text" name="shipToLastName" th:value="${session.order.shipToLastName}">
+                    <input type="text" name="shipToLastName" th:value="${session.orderImpl.shipToLastName}">
 
                 </td>
 
@@ -59,7 +59,7 @@
 
                 <td>
 
-                    <input type="text" name="shipAddress1" th:value="${session.order.shipAddress1}">
+                    <input type="text" name="shipAddress1" th:value="${session.orderImpl.shipAddress1}">
 
                 </td>
 
@@ -70,7 +70,7 @@
 
                 <td>
 
-                    <input type="text" size="40" name="shipAddress2" th:value="${session.order.shipAddress2}">
+                    <input type="text" size="40" name="shipAddress2" th:value="${session.orderImpl.shipAddress2}">
 
                 </td>
 
@@ -82,7 +82,7 @@
 
                 <td>
 
-                    <input type="text" name="shipCity" th:value="${session.order.shipCity}">
+                    <input type="text" name="shipCity" th:value="${session.orderImpl.shipCity}">
 
                 </td>
 
@@ -94,7 +94,7 @@
 
                 <td>
 
-                    <input type="text" name="shipState" th:value="${session.order.shipState}">
+                    <input type="text" name="shipState" th:value="${session.orderImpl.shipState}">
 
                 </td>
 
@@ -106,7 +106,7 @@
 
                 <td>
 
-                    <input type="text" name="shipZip" th:value="${session.order.shipZip}">
+                    <input type="text" name="shipZip" th:value="${session.orderImpl.shipZip}">
 
                 </td>
 
@@ -118,7 +118,7 @@
 
                 <td>
 
-                    <input type="text" size="15" name="shipCountry" th:value="${session.order.shipCountry}">
+                    <input type="text" size="15" name="shipCountry" th:value="${session.orderImpl.shipCountry}">
 
                 </td>
 

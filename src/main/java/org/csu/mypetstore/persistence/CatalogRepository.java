@@ -1,4 +1,4 @@
-package org.csu.mypetstore.service;
+package org.csu.mypetstore.persistence;
 
 import org.csu.mypetstore.domain.Category;
 import org.csu.mypetstore.domain.Item;
@@ -6,7 +6,7 @@ import org.csu.mypetstore.domain.Product;
 
 import java.util.List;
 
-public interface CatalogService {
+public interface CatalogRepository {
     Category getCategory(String categoryId);
 
     List<Category> getCategoryList();
