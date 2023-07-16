@@ -18,7 +18,11 @@ import java.util.List;
 public class CatalogServiceImpl implements CatalogService {
 
     @Autowired
-    private CatalogRepository catalogRepository;
+    private final CatalogRepository catalogRepository;
+
+    public CatalogServiceImpl(CatalogRepository catalogRepository) {
+        this.catalogRepository = catalogRepository;
+    }
 
     @Override
     public CategoryDTO getCategory(String categoryId) {

@@ -35,7 +35,7 @@ public class Order {
     private String cardType;
     private String locale;
     private String status;
-    private List<LineItem> lineItems = new ArrayList<LineItem>();
+    private List<LineItem> lineItems = new ArrayList<>();
 
     public Order() {
     }

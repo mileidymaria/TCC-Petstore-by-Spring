@@ -8,6 +8,7 @@ import org.csu.mypetstore.persistence.OrderRepository;
 import org.csu.mypetstore.service.AccountService;
 import org.csu.mypetstore.service.CatalogService;
 import org.csu.mypetstore.service.OrderService;
+import org.csu.mypetstore.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -21,21 +22,28 @@ import java.util.Map;
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
     @Autowired
-    private Order order;
+    private final Order order;
 
     @Autowired
-    private Cart cart;
+    private final Cart cart;
 
     @Autowired
-    private AccountService accountService;
+    private final AccountService accountService;
 
     @Autowired
-    private CatalogService catalogService;
+    private final CatalogService catalogService;
 
     private boolean confirmed;
-    private boolean shippingAddressRequired;
+
+    public OrderServiceImpl(OrderRepository orderRepository, Order order, Cart cart, AccountService accountService, CatalogService catalogService) {
+        this.orderRepository = orderRepository;
+        this.order = order;
+        this.cart = cart;
+        this.accountService = accountService;
+        this.catalogService = catalogService;
+    }
 
     @Override
     public String insertOrder(OrderDTO order, Model model){
@@ -51,37 +59,39 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public String newOrderForm(AccountDTO account, boolean authenticated, Model model){
-        if(account == null || !authenticated){
+        String path = "";
+        if(Validator.getSoleInstance().isNull(account) || !authenticated){
             model.addAttribute("msg","You must sign on before attempting to check out.  Please sign on and try checking out again.");
-            return "account/signon";
-        }else if(cart !=null){
+            path = "account/signon";
+        } else if(!Validator.getSoleInstance().isNull(cart)){
             order.initOrder(accountService.toAccount(account), cart);
-            return "order/NewOrderForm";
+            path = "order/NewOrderForm";
         }
         else{
             model.addAttribute("msg","An order could not be created because a cart could not be found.");
-            return "common/error";
+            path = "common/error";
         }
+        return path;
     }
 
     @Override
     public String newOrder(HttpServletRequest request, Model model){
-        if(request.getParameter("shippingAddressRequired") != null){
-            shippingAddressRequired = false;
+        String path = "";
+        if(!Validator.getSoleInstance().isNull(request.getParameter("shippingAddressRequired"))){
             model.addAttribute("order", order);
-            return "order/ShippingForm";
-        }else if(!confirmed){
+            path = "order/ShippingForm";
+        } else if(!confirmed){
             model.addAttribute("order", order);
-            return "order/ConfirmOrder";
-        }else if(order != null){
+            path = "order/ConfirmOrder";
+        } else if(!Validator.getSoleInstance().isNull(order)){
             insertOrder(toOrderDTO(order));
             model.addAttribute("msg","Thank you, your order has been submitted.");
-
-            return "order/ViewOrder";
-        }else{
+            path = "order/ViewOrder";
+        } else{
             model.addAttribute("msg","An error occurred processing your order (order was null).");
-            return "common/error";
+            path = "common/error";
         }
+        return path;
     }
 
     @Override
@@ -106,8 +116,8 @@ public class OrderServiceImpl implements OrderService {
 
     private List<OrderDTO> toOrderDTOList (List<Order> orderList){
         List<OrderDTO> orderDTOList = new ArrayList<>();
-        for (Order order : orderList){
-            orderDTOList.add(toOrderDTO(order));
+        for (Order orderToParse : orderList){
+            orderDTOList.add(toOrderDTO(orderToParse));
         }
         return orderDTOList;
     }

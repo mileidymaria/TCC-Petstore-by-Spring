@@ -1,9 +1,10 @@
 package org.csu.mypetstore.domain;
 
+import org.csu.mypetstore.utils.Validator;
+
 import java.io.Serializable;
 
 public class Account implements Serializable {
-
     private static final long serialVersionUID = 8751282105532159742L;
 
     private String username;
@@ -68,10 +69,8 @@ public class Account implements Serializable {
     }
 
     public boolean isPasswordValid(String repeatedPassword){
-        return getPassword() == null
-                || getPassword().length() == 0
-                || repeatedPassword == null
-                || repeatedPassword.length() == 0;
+        return Validator.getSoleInstance().isNull(repeatedPassword)
+                || Validator.getSoleInstance().isLengthEqualTo(repeatedPassword, 0);
     }
 
 
@@ -112,7 +111,6 @@ public class Account implements Serializable {
         return lastName;
     }
 
-    //@Validate(required=true, on={"newAccount", "editAccount"})
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }

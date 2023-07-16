@@ -15,13 +15,19 @@ import java.util.List;
 @Repository
 public class CatalogRepositoryImpl implements CatalogRepository {
     @Autowired
-    private CategoryMapper categoryMapper;
+    private final CategoryMapper categoryMapper;
 
     @Autowired
-    private ProductMapper productMapper;
+    private final ProductMapper productMapper;
 
     @Autowired
-    private ItemMapper itemMapper;
+    private final ItemMapper itemMapper;
+
+    public CatalogRepositoryImpl(CategoryMapper categoryMapper, ProductMapper productMapper, ItemMapper itemMapper) {
+        this.categoryMapper = categoryMapper;
+        this.productMapper = productMapper;
+        this.itemMapper = itemMapper;
+    }
 
     @Override
     public Category getCategory(String categoryId) {

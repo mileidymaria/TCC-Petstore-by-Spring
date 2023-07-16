@@ -6,6 +6,7 @@ import org.csu.mypetstore.dto.ProductDTO;
 import org.csu.mypetstore.persistence.AccountRepository;
 import org.csu.mypetstore.service.AccountService;
 import org.csu.mypetstore.service.CatalogService;
+import org.csu.mypetstore.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,15 +21,18 @@ import java.util.List;
 public class AccountServiceImpl implements AccountService {
 
     private static final List<String> LANGUAGE_LIST;
+    private static final String ACCOUNT_STR = "account";
+    private static final String MY_LIST_STR = "myList";
+    private static final String AUTHENTICATED_STR = "authenticated";
     private static final List<String> CATEGORY_LIST;
 
     static {
-        List<String> langList = new ArrayList<String>();
+        List<String> langList = new ArrayList<>();
         langList.add("ENGLISH");
         langList.add("CHINESE");
         LANGUAGE_LIST = Collections.unmodifiableList(langList);
 
-        List<String> catList = new ArrayList<String>();
+        List<String> catList = new ArrayList<>();
         catList.add("FISH");
         catList.add("DOGS");
         catList.add("REPTILES");
@@ -39,9 +43,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Autowired
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
     @Autowired
-    private CatalogService catalogService;
+    private final CatalogService catalogService;
+
+    public AccountServiceImpl(AccountRepository accountRepository, CatalogService catalogService) {
+        this.accountRepository = accountRepository;
+        this.catalogService = catalogService;
+    }
+
 
     @Override
     public AccountDTO getAccount(String username){
@@ -50,31 +60,29 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public String editAccount(AccountDTO accountDTO, String repeatedPassword, Model model) {
-        Account account = toAccount(accountDTO);
-        if (account.isPasswordValid(repeatedPassword)) {
-            String msg = "密码不能为空";
-            model.addAttribute("msg", msg);
-            account=null;
-            return "account/edit_account";
-        } else if (!account.getPassword().equals(repeatedPassword)) {
-            String msg = "两次密码不一致";
-            model.addAttribute("msg", msg);
-            account=null;
-            return "account/edit_account";
-        } else {
-            List<ProductDTO> myList = editAccount(accountDTO);
-            model.addAttribute("account", account);
-            model.addAttribute("myList", myList);
-            model.addAttribute("authenticated", true);
-            return "redirect:/catalog/view";
+        Account parsedAccount = toAccount(accountDTO);
+        String msg = null;
+        String path = "account/edit_account";
+
+        if (parsedAccount.isPasswordValid(repeatedPassword)) {
+            msg = "密码不能为空";
+        } else if (!parsedAccount.getPassword().equals(repeatedPassword)) {
+            msg = "两次密码不一致";
         }
+        if (Validator.getSoleInstance().isNull(msg)) {
+            model.addAttribute(ACCOUNT_STR, parsedAccount);
+            model.addAttribute(MY_LIST_STR, editAccount(accountDTO));
+            model.addAttribute(AUTHENTICATED_STR, true);
+            path = "redirect:/catalog/view";
+        }
+        model.addAttribute("msg", msg);
+        return path;
     }
 
     private List<ProductDTO> editAccount(AccountDTO account){
         updateAccount(account);
         account = getAccount(account.getUsername());
-        List<ProductDTO> productList = catalogService.getProductListByCategory(account.getFavouriteCategoryId());
-        return productList;
+        return catalogService.getProductListByCategory(account.getFavouriteCategoryId());
     }
 
     public Account getAccount(String username, String password){
@@ -83,55 +91,53 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public String setupAccount(String username, String password, Model model) {
-        Account account = getAccount(username, password);
-        if (account == null) {
-            String msg = "Invalid username or password.  Signon failed.";
-            model.addAttribute("msg", msg);
-            return "account/signon";
+        Account parsedAccount = getAccount(username, password);
+        String path;
+        String msg = "";
+        if (Validator.getSoleInstance().isNull(parsedAccount)) {
+            path = "account/signon";
+            msg = "Invalid username or password. Signon failed.";
         } else {
-            account.setPassword(null);
-            List<ProductDTO> myList = catalogService.getProductListByCategory(account.getFavouriteCategoryId());
-            boolean authenticated = true;
-            model.addAttribute("account", account);
-            model.addAttribute("myList", myList);
-            model.addAttribute("authenticated", authenticated);
-            return "catalog/main";
+            parsedAccount.setPassword(null);
+            model.addAttribute(ACCOUNT_STR, parsedAccount);
+            model.addAttribute(MY_LIST_STR, catalogService.getProductListByCategory(parsedAccount.getFavouriteCategoryId()));
+            model.addAttribute(AUTHENTICATED_STR, true);
+            path = "catalog/main";
         }
+        model.addAttribute("msg", msg);
+        return path;
     }
 
     @Override
     public String setupAccount(AccountDTO accountDTO, String repeatedPassword, Model model) {
-        String errorMsg = null;
-        Account account = toAccount(accountDTO);
-        List<ProductDTO> myList = null;
-        boolean authenticated = false;
+        Account parsedAccount = toAccount(accountDTO);
+        boolean isValid = parsedAccount.isPasswordValid(repeatedPassword);
+        boolean isPasswordMismatch = !parsedAccount.getPassword().equals(repeatedPassword);
+        boolean isUsernameTaken = !Validator.getSoleInstance().isNull(getAccount(parsedAccount.getUsername()));
 
-        if (!account.isPasswordValid(repeatedPassword)) {
+        String errorMsg = null;
+        String path = "account/new_account";
+
+        if (!isValid) {
             errorMsg = "密码不能为空";
-        } else if (!account.getPassword().equals(repeatedPassword)) {
+        } else if (isPasswordMismatch) {
             errorMsg = "两次密码不一致";
-        } else if (getAccount(account.getUsername()) != null) {
+        } else if (isUsernameTaken) {
             errorMsg = "用户名已经被注册";
         } else {
-            accountRepository.create(account);
-            account = accountRepository.get(account.getUsername());
-            myList = catalogService.getProductListByCategory(account.getFavouriteCategoryId());
-            authenticated = true;
+            accountRepository.create(parsedAccount);
+            parsedAccount = accountRepository.get(parsedAccount.getUsername());
+            model.addAttribute(ACCOUNT_STR, new AccountDTO());
+            model.addAttribute(MY_LIST_STR, catalogService.getProductListByCategory(parsedAccount.getFavouriteCategoryId()));
+            model.addAttribute(AUTHENTICATED_STR, true);
+            model.addAttribute("newAccount", new Account());
+            model.addAttribute("LANGUAGE_LIST", LANGUAGE_LIST);
+            model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);
+            path = "account/signon";
         }
 
         model.addAttribute("msg", errorMsg);
-        model.addAttribute("account", new AccountDTO());
-        model.addAttribute("myList", myList);
-        model.addAttribute("authenticated", authenticated);
-        model.addAttribute("newAccount", new Account());
-        model.addAttribute("LANGUAGE_LIST", LANGUAGE_LIST);
-        model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);
-
-        if (errorMsg != null) {
-            return "account/new_account";
-        } else {
-            return "account/signon";
-        }
+        return path;
     }
 
     @Override

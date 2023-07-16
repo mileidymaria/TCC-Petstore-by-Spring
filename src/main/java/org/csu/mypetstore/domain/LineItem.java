@@ -1,6 +1,8 @@
 package org.csu.mypetstore.domain;
 
 
+import org.csu.mypetstore.utils.Validator;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -90,10 +92,8 @@ public class LineItem implements Serializable {
     }
 
     private void calculateTotal() {
-        if (item != null && item.getListPrice() != null) {
-            total = item.getListPrice().multiply(new BigDecimal(quantity));
-        } else {
-            total = null;
-        }
+        total = Validator.getSoleInstance().isNull(item)
+                && !Validator.getSoleInstance().isNull(item.getListPrice()) ?
+                item.getListPrice().multiply(new BigDecimal(quantity)) : null;
     }
 }

@@ -15,18 +15,18 @@ import java.util.List;
 @SessionAttributes({"account", "myList", "authenticated"})
 public class AccountController {
     @Autowired
-    private AccountService accountService;
+    private final AccountService accountService;
 
     private static final List<String> LANGUAGE_LIST;
     private static final List<String> CATEGORY_LIST;
 
     static {
-        List<String> langList = new ArrayList<String>();
+        List<String> langList = new ArrayList<>();
         langList.add("ENGLISH");
         langList.add("CHINESE");
         LANGUAGE_LIST = Collections.unmodifiableList(langList);
 
-        List<String> catList = new ArrayList<String>();
+        List<String> catList = new ArrayList<>();
         catList.add("FISH");
         catList.add("DOGS");
         catList.add("REPTILES");
@@ -34,6 +34,10 @@ public class AccountController {
         catList.add("BIRDS");
 
         CATEGORY_LIST = Collections.unmodifiableList(catList);
+    }
+
+    public AccountController(AccountService accountService) {
+        this.accountService = accountService;
     }
 
     @GetMapping("signonForm")

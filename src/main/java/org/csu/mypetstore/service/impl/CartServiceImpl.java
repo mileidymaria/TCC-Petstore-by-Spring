@@ -9,6 +9,7 @@ import org.csu.mypetstore.dto.AccountDTO;
 import org.csu.mypetstore.service.AccountService;
 import org.csu.mypetstore.service.CartService;
 import org.csu.mypetstore.service.CatalogService;
+import org.csu.mypetstore.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -19,14 +20,21 @@ import java.util.Iterator;
 @Service
 public class CartServiceImpl implements CartService {
     @Autowired
-    private CatalogService catalogService;
+    private final CatalogService catalogService;
     @Autowired
-    private Cart cart;
+    private final Cart cart;
     @Autowired
-    private Order order;
+    private final Order order;
 
     @Autowired
-    private AccountService accountService;
+    private final AccountService accountService;
+
+    public CartServiceImpl(CatalogService catalogService, Cart cart, Order order, AccountService accountService) {
+        this.catalogService = catalogService;
+        this.cart = cart;
+        this.order = order;
+        this.accountService = accountService;
+    }
 
     @Override
     public String addItemToCart(String workingItemId, Model model){
@@ -70,25 +78,24 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public String success(AccountDTO account, Model model){
-        if(cart !=null){
+        if (!Validator.getSoleInstance().isNull(cart)) {
             order.initOrder(accountService.toAccount(account), cart);
             model.addAttribute("order", order);
         }
+        String path = "order/NewOrderForm";
         Iterator<CartItem> cartItems = cart.getAllCartItems();
-        while (cartItems.hasNext())
-        {
-            CartItem cartItem = cartItems.next();
-            String itemId = cartItem.getItem().getItemId();
-            catalogService.updateInventoryQuantity(itemId,cartItem.getQuantity());
+        while (cartItems.hasNext()) {
+            String itemId = cartItems.next().getItem().getItemId();
+            catalogService.updateInventoryQuantity(itemId, cartItems.next().getQuantity());
             Item item = cart.removeItemById(itemId);
             model.addAttribute("cart", cart);
-            if(item == null){
+
+            if (Validator.getSoleInstance().isNull(item)) {
                 model.addAttribute("msg", "Please do it again");
-                return "common/error";
-            }else{
-                return "order/NewOrderForm";
+                path = "common/error";
             }
         }
-        return "order/NewOrderForm";
+
+        return path;
     }
 }

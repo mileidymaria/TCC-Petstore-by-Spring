@@ -1,15 +1,22 @@
 package org.csu.mypetstore.domain;
 
+import org.csu.mypetstore.utils.Validator;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class CartItem implements Serializable {
     private static final long serialVersionUID = 6620528781626504362L;
-
     private Item item;
     private int quantity;
     private boolean inStock;
     private BigDecimal total;
+
+    public CartItem(Item item, int quantity, boolean inStock) {
+        this.item = item;
+        this.quantity = quantity;
+        this.inStock = inStock;
+    }
 
     public boolean isInStock() {
         return inStock;
@@ -47,11 +54,9 @@ public class CartItem implements Serializable {
     }
 
     private void calculateTotal() {
-        if (item != null && item.getListPrice() != null) {
-            total = item.getListPrice().multiply(new BigDecimal(quantity));
-        } else {
-            total = null;
-        }
+        total = Validator.getSoleInstance().isNull(item)
+                && !Validator.getSoleInstance().isNull(item.getListPrice()) ?
+                item.getListPrice().multiply(new BigDecimal(quantity)) : null;
     }
 
 }

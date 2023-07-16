@@ -1,4 +1,5 @@
 package org.csu.mypetstore.dto;
+
 public class AccountDTO {
 
     private String username;

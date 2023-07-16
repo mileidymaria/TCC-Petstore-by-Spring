@@ -88,9 +88,4 @@ public class ItemDTO {
     public int getQuantity() {
         return quantity;
     }
-
-    public String toString() {
-        return "(" + getItemId() + "-" + getProductId() + ")";
-    }
-
 }

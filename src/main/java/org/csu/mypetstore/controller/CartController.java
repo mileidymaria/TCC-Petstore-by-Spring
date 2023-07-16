@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.SessionScope;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
 
 @Controller
 @SessionScope
@@ -18,15 +17,6 @@ import java.util.*;
 public class CartController {
     @Autowired
     private CartService cartService;
-
-    private static final List<String> CARD_TYPE_LIST;
-    static {
-        List<String>cardList = new ArrayList<String>();
-        cardList.add("Visa");
-        cardList.add("MasterCard");
-        cardList.add("American Express");
-        CARD_TYPE_LIST = Collections.unmodifiableList(cardList);
-    }
 
     @GetMapping("viewCart")
     public String viewCart(Model model){

@@ -1,7 +1,5 @@
 package org.csu.mypetstore.dto;
 
-
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class LineItemDTO {
@@ -34,6 +32,10 @@ public class LineItemDTO {
         return lineNumber;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
     public String getItemId() {
         return itemId;
     }
@@ -42,15 +44,11 @@ public class LineItemDTO {
         return unitPrice;
     }
 
-    public BigDecimal getTotal() {
-        return total;
-    }
-
     public ItemDTO getItem() {
         return item;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public BigDecimal getTotal() {
+        return total;
     }
 }

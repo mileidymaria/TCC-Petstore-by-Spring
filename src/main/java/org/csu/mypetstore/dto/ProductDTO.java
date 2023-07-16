@@ -21,6 +21,14 @@ public class ProductDTO{
         this.descriptionText = descriptionText;
     }
 
+    public void setDescriptionImage(String descriptionImage) {
+        this.descriptionImage = descriptionImage;
+    }
+
+    public void setDescriptionText(String descriptionText) {
+        this.descriptionText = descriptionText;
+    }
+
     public String getProductId() {
         return productId;
     }
@@ -41,21 +49,7 @@ public class ProductDTO{
         return descriptionImage;
     }
 
-    public void setDescriptionImage(String descriptionImage) {
-        this.descriptionImage = descriptionImage;
-    }
-
     public String getDescriptionText() {
         return descriptionText;
     }
-
-    public void setDescriptionText(String descriptionText) {
-        this.descriptionText = descriptionText;
-    }
-
-    public String toString() {
-        return getName();
-    }
-
-
 }

@@ -9,9 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @Controller
 @RequestMapping("order")
@@ -20,14 +17,6 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    private static final List<String>CARD_TYPE_LIST;
-    static {
-        List<String>cardList = new ArrayList<String>();
-        cardList.add("Visa");
-        cardList.add("MasterCard");
-        cardList.add("American Express");
-        CARD_TYPE_LIST = Collections.unmodifiableList(cardList);
-    }
     @GetMapping("viewOrder")
     public  String viewOrder(OrderDTO order, Model model){
         return orderService.insertOrder(order, model);

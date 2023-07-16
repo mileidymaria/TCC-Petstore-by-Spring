@@ -3,6 +3,7 @@ package org.csu.mypetstore.persistence.impl;
 import org.csu.mypetstore.domain.Account;
 import org.csu.mypetstore.persistence.AccountRepository;
 import org.csu.mypetstore.persistence.mapper.AccountMapper;
+import org.csu.mypetstore.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class AccountRepositoryImpl implements AccountRepository {
 
     @Autowired
-    private AccountMapper accountMapper;
+    private final AccountMapper accountMapper;
+
+    public AccountRepositoryImpl(AccountMapper accountMapper) {
+        this.accountMapper = accountMapper;
+    }
 
     @Override
     public Account get(String username){
@@ -42,7 +47,8 @@ public class AccountRepositoryImpl implements AccountRepository {
         accountMapper.updateAccount(account);
         accountMapper.updateProfile(account);
 
-        if(account.getPassword() != null && account.getPassword().length() > 0){
+        if(!Validator.getSoleInstance().isNull(account.getPassword())
+                && Validator.getSoleInstance().isGreaterThan(account.getPassword().length(), 0)){
             accountMapper.updateSignon(account);
         }
     }

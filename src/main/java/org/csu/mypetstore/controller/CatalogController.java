@@ -18,7 +18,6 @@ public class CatalogController {
     @Autowired
     private CatalogService catalogService;
 
-
     @GetMapping("view")
     public String view(){
         return "catalog/main";
@@ -60,16 +59,18 @@ public class CatalogController {
 
     @PostMapping("searchProducts")
     public String searchProducts(String keyword, Model model){
-        if(keyword == null || keyword.length() < 1){
-            String msg = "Please enter a keyword to search for, then press the search button.";
-            model.addAttribute("msg",msg);
+        if(isKeywordValid(keyword)){
+            model.addAttribute("msg","Please enter a keyword to search for, then press the search button.");
             return "common/error";
-        }else {
-            List<ProductDTO> productList = catalogService.searchProductList(keyword.toLowerCase());
-            processProductDescription(productList);
-            model.addAttribute("productList",productList);
-            return "catalog/search_products";
         }
+        List<ProductDTO> productList = catalogService.searchProductList(keyword.toLowerCase());
+        processProductDescription(productList);
+        model.addAttribute("productList",productList);
+        return "catalog/search_products";
+    }
+
+    private boolean isKeywordValid(String keyword){
+        return keyword == null || keyword.length() < 1;
     }
 
     private void processProductDescription(ProductDTO product){

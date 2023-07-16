@@ -1,12 +1,10 @@
 package org.csu.mypetstore.dto;
 
-import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-@Component
+
 public class OrderDTO {
     private int orderId;
     private String username;
@@ -34,7 +32,7 @@ public class OrderDTO {
     private String cardType;
     private String locale;
     private String status;
-    private List<LineItemDTO> lineItems = new ArrayList<LineItemDTO>();
+    private List<LineItemDTO> lineItems = new ArrayList<>();
 
     public OrderDTO() {
     }

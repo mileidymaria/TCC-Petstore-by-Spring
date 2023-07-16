@@ -5,8 +5,6 @@ import org.csu.mypetstore.dto.AccountDTO;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
-import java.util.List;
-
 public interface AccountService {
     AccountDTO getAccount(String username);
 
