@@ -21,6 +21,25 @@ public class Item implements Serializable {
     private Product product;
     private int quantity;
 
+    public Item() {
+    }
+
+    public Item(String itemId, String productId, BigDecimal listPrice, BigDecimal unitCost, int supplierId, String status, String attribute1, String attribute2, String attribute3, String attribute4, String attribute5, Product product, int quantity) {
+        this.itemId = itemId;
+        this.productId = productId;
+        this.listPrice = listPrice;
+        this.unitCost = unitCost;
+        this.supplierId = supplierId;
+        this.status = status;
+        this.attribute1 = attribute1;
+        this.attribute2 = attribute2;
+        this.attribute3 = attribute3;
+        this.attribute4 = attribute4;
+        this.attribute5 = attribute5;
+        this.product = product;
+        this.quantity = quantity;
+    }
+
     public String getItemId() {
         return itemId;
     }

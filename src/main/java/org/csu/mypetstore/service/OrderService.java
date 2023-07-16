@@ -1,26 +1,26 @@
 package org.csu.mypetstore.service;
 
-import org.csu.mypetstore.domain.Account;
-import org.csu.mypetstore.domain.Order;
+import org.csu.mypetstore.dto.AccountDTO;
+import org.csu.mypetstore.dto.OrderDTO;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface OrderService {
-    String insertOrder(Order orderImpl, Model model);
+    String insertOrder(OrderDTO order, Model model);
 
-    void insertOrder(Order orderImpl);
+    void insertOrder(OrderDTO orderImpl);
 
-    String newOrderForm(Account account, boolean authenticated, Model model);
+    String newOrderForm(AccountDTO account, boolean authenticated, Model model);
 
     String newOrder(HttpServletRequest request, Model model);
 
-    Order getOrder(int orderId);
+    OrderDTO getOrder(int orderId);
 
-    List<Order> getOrdersByUsername(String username);
+    List<OrderDTO> getOrdersByUsername(String username);
 
     int getNextId(String name);
 
-    void confirmOrder(Order orderImpl);
+    void confirmOrder(OrderDTO order);
 }

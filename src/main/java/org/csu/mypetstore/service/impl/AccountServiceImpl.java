@@ -1,7 +1,8 @@
 package org.csu.mypetstore.service.impl;
 
 import org.csu.mypetstore.domain.Account;
-import org.csu.mypetstore.domain.Product;
+import org.csu.mypetstore.dto.AccountDTO;
+import org.csu.mypetstore.dto.ProductDTO;
 import org.csu.mypetstore.persistence.AccountRepository;
 import org.csu.mypetstore.service.AccountService;
 import org.csu.mypetstore.service.CatalogService;
@@ -43,19 +44,39 @@ public class AccountServiceImpl implements AccountService {
     private CatalogService catalogService;
 
     @Override
-    public Account getAccount(String username){
-        return accountRepository.get(username);
+    public AccountDTO getAccount(String username){
+        return toAccountDTO(accountRepository.get(username));
     }
 
     @Override
-    public List<Product> editAccount(Account account){
+    public String editAccount(AccountDTO accountDTO, String repeatedPassword, Model model) {
+        Account account = toAccount(accountDTO);
+        if (account.isPasswordValid(repeatedPassword)) {
+            String msg = "密码不能为空";
+            model.addAttribute("msg", msg);
+            account=null;
+            return "account/edit_account";
+        } else if (!account.getPassword().equals(repeatedPassword)) {
+            String msg = "两次密码不一致";
+            model.addAttribute("msg", msg);
+            account=null;
+            return "account/edit_account";
+        } else {
+            List<ProductDTO> myList = editAccount(accountDTO);
+            model.addAttribute("account", account);
+            model.addAttribute("myList", myList);
+            model.addAttribute("authenticated", true);
+            return "redirect:/catalog/view";
+        }
+    }
+
+    private List<ProductDTO> editAccount(AccountDTO account){
         updateAccount(account);
         account = getAccount(account.getUsername());
-        List<Product> productList = catalogService.getProductListByCategory(account.getFavouriteCategoryId());
+        List<ProductDTO> productList = catalogService.getProductListByCategory(account.getFavouriteCategoryId());
         return productList;
     }
 
-    @Override
     public Account getAccount(String username, String password){
         return accountRepository.get(username, password);
     }
@@ -69,7 +90,7 @@ public class AccountServiceImpl implements AccountService {
             return "account/signon";
         } else {
             account.setPassword(null);
-            List<Product> myList = catalogService.getProductListByCategory(account.getFavouriteCategoryId());
+            List<ProductDTO> myList = catalogService.getProductListByCategory(account.getFavouriteCategoryId());
             boolean authenticated = true;
             model.addAttribute("account", account);
             model.addAttribute("myList", myList);
@@ -79,10 +100,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public String setupAccount(Account account, String repeatedPassword, Model model) {
+    public String setupAccount(AccountDTO accountDTO, String repeatedPassword, Model model) {
         String errorMsg = null;
-        Account loginAccount = new Account();
-        List<Product> myList = null;
+        Account account = toAccount(accountDTO);
+        List<ProductDTO> myList = null;
         boolean authenticated = false;
 
         if (!account.isPasswordValid(repeatedPassword)) {
@@ -92,14 +113,14 @@ public class AccountServiceImpl implements AccountService {
         } else if (getAccount(account.getUsername()) != null) {
             errorMsg = "用户名已经被注册";
         } else {
-            insertAccount(account);
-            account = getAccount(account.getUsername());
+            accountRepository.create(account);
+            account = accountRepository.get(account.getUsername());
             myList = catalogService.getProductListByCategory(account.getFavouriteCategoryId());
             authenticated = true;
         }
 
         model.addAttribute("msg", errorMsg);
-        model.addAttribute("account", loginAccount);
+        model.addAttribute("account", new AccountDTO());
         model.addAttribute("myList", myList);
         model.addAttribute("authenticated", authenticated);
         model.addAttribute("newAccount", new Account());
@@ -118,12 +139,59 @@ public class AccountServiceImpl implements AccountService {
         声明式事务处理
      */
     @Transactional
-    public void insertAccount(Account account){
-        accountRepository.create(account);
+    public void insertAccount(AccountDTO account){
+        accountRepository.create(toAccount(account));
     }
 
     @Override
-    public void updateAccount(Account account){
-        accountRepository.update(account);
+    public void updateAccount(AccountDTO account){
+        accountRepository.update(toAccount(account));
+    }
+
+    @Override
+    public Account toAccount(AccountDTO accountDTO){
+        return new Account(
+                accountDTO.getUsername(),
+                accountDTO.getPassword(),
+                accountDTO.getEmail(),
+                accountDTO.getFirstName(),
+                accountDTO.getLastName(),
+                accountDTO.getStatus(),
+                accountDTO.getAddress1(),
+                accountDTO.getAddress2(),
+                accountDTO.getCity(),
+                accountDTO.getState(),
+                accountDTO.getZip(),
+                accountDTO.getCountry(),
+                accountDTO.getPhone(),
+                accountDTO.getFavouriteCategoryId(),
+                accountDTO.getLanguagePreference(),
+                accountDTO.isListOption(),
+                accountDTO.isBannerOption(),
+                accountDTO.getBannerName()
+        );
+    }
+
+    public AccountDTO toAccountDTO(Account account){
+        return new AccountDTO(
+                account.getUsername(),
+                account.getPassword(),
+                account.getEmail(),
+                account.getFirstName(),
+                account.getLastName(),
+                account.getStatus(),
+                account.getAddress1(),
+                account.getAddress2(),
+                account.getCity(),
+                account.getState(),
+                account.getZip(),
+                account.getCountry(),
+                account.getPhone(),
+                account.getFavouriteCategoryId(),
+                account.getLanguagePreference(),
+                account.isListOption(),
+                account.isBannerOption(),
+                account.getBannerName()
+        );
     }
 }

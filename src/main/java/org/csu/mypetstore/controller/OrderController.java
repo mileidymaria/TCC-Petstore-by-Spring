@@ -1,7 +1,7 @@
 package org.csu.mypetstore.controller;
 
-import org.csu.mypetstore.domain.Account;
-import org.csu.mypetstore.domain.Order;
+import org.csu.mypetstore.dto.AccountDTO;
+import org.csu.mypetstore.dto.OrderDTO;
 import org.csu.mypetstore.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,8 +29,8 @@ public class OrderController {
         CARD_TYPE_LIST = Collections.unmodifiableList(cardList);
     }
     @GetMapping("viewOrder")
-    public  String viewOrder(Order orderImpl, Model model){
-        return orderService.insertOrder(orderImpl, model);
+    public  String viewOrder(OrderDTO order, Model model){
+        return orderService.insertOrder(order, model);
     }
     @RequestMapping("confirm")
     public String newOrder(HttpServletRequest request, Model model){
@@ -38,11 +38,11 @@ public class OrderController {
     }
 
     @RequestMapping("newOrderForm")
-    public String newOrderForm(Account account, @ModelAttribute("authenticated")boolean authenticated, Model model){
+    public String newOrderForm(AccountDTO account, @ModelAttribute("authenticated")boolean authenticated, Model model){
         return orderService.newOrderForm(account, authenticated, model);
     }
     @GetMapping("listOrders")
-    public String listOrders(@ModelAttribute("account") Account account, Model model){
+    public String listOrders(@ModelAttribute("account") AccountDTO account, Model model){
         model.addAttribute("orderList", orderService.getOrdersByUsername(account.getUsername()));
         return "order/ListOrders";
     }

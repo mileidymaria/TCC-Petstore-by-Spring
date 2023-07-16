@@ -1,27 +1,32 @@
 package org.csu.mypetstore.service;
 
-import org.csu.mypetstore.domain.Category;
 import org.csu.mypetstore.domain.Item;
-import org.csu.mypetstore.domain.Product;
+import org.csu.mypetstore.dto.CategoryDTO;
+import org.csu.mypetstore.dto.ItemDTO;
+import org.csu.mypetstore.dto.ProductDTO;
 
 import java.util.List;
 
 public interface CatalogService {
-    Category getCategory(String categoryId);
+    CategoryDTO getCategory(String categoryId);
 
-    List<Category> getCategoryList();
+    List<CategoryDTO> getCategoryList();
 
-    Product getProduct(String productId);
+    ProductDTO getProduct(String productId);
 
-    List<Product> getProductListByCategory(String categoryId);
+    List<ProductDTO> getProductListByCategory(String categoryId);
 
-    List<Product> searchProductList(String keyword);
+    List<ProductDTO> searchProductList(String keyword);
 
-    List<Item> getItemListByProduct(String productId);
+    List<ItemDTO> getItemListByProduct(String productId);
 
-    Item getItem(String itemId);
+    ItemDTO getItem(String itemId);
 
     boolean isItemInStock(String itemId);
 
     void updateInventoryQuantity(String itemId, int quantity);
+
+    ItemDTO toItemDTO(Item item);
+
+    Item toItem(ItemDTO item);
 }

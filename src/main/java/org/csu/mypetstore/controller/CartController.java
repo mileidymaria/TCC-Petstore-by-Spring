@@ -1,6 +1,6 @@
 package org.csu.mypetstore.controller;
 
-import org.csu.mypetstore.domain.Account;
+import org.csu.mypetstore.dto.AccountDTO;
 import org.csu.mypetstore.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +15,7 @@ import java.util.*;
 @SessionScope
 @SessionAttributes({"account","authenticated","myList","order"})
 @RequestMapping("cart")
-public class Cartcontroller {
+public class CartController {
     @Autowired
     private CartService cartService;
 
@@ -54,7 +54,7 @@ public class Cartcontroller {
     }
 
     @GetMapping("success")
-    public String success(Account account, Model model){
+    public String success(AccountDTO account, Model model){
         return cartService.success(account, model);
     }
 }

@@ -1,6 +1,12 @@
 package org.csu.mypetstore.service.impl;
 
-import org.csu.mypetstore.domain.*;
+
+import org.csu.mypetstore.domain.Cart;
+import org.csu.mypetstore.domain.CartItem;
+import org.csu.mypetstore.domain.Item;
+import org.csu.mypetstore.domain.Order;
+import org.csu.mypetstore.dto.AccountDTO;
+import org.csu.mypetstore.service.AccountService;
 import org.csu.mypetstore.service.CartService;
 import org.csu.mypetstore.service.CatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +23,15 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private Cart cart;
     @Autowired
-    private Order orderImpl;
+    private Order order;
+
+    @Autowired
+    private AccountService accountService;
 
     @Override
     public String addItemToCart(String workingItemId, Model model){
         boolean isInStock = catalogService.isItemInStock(workingItemId);
-        Item item = catalogService.getItem(workingItemId);
+        Item item = catalogService.toItem(catalogService.getItem(workingItemId));
         cart.addItem(item,isInStock, workingItemId);
         model.addAttribute("cart", cart);
         return "cart/cart";
@@ -60,10 +69,10 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public String success(Account account, Model model){
+    public String success(AccountDTO account, Model model){
         if(cart !=null){
-            orderImpl.initOrder(account, cart);
-            model.addAttribute("order", orderImpl);
+            order.initOrder(accountService.toAccount(account), cart);
+            model.addAttribute("order", order);
         }
         Iterator<CartItem> cartItems = cart.getAllCartItems();
         while (cartItems.hasNext())

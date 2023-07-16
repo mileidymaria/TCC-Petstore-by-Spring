@@ -1,13 +1,11 @@
 package org.csu.mypetstore.controller;
 
-
 import org.csu.mypetstore.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.csu.mypetstore.domain.Account;
-import org.csu.mypetstore.domain.Product;
+import org.csu.mypetstore.dto.AccountDTO;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,7 +13,7 @@ import java.util.List;
 @Controller
 @RequestMapping("account")
 @SessionAttributes({"account", "myList", "authenticated"})
-public class Accountcontroller {
+public class AccountController {
     @Autowired
     private AccountService accountService;
 
@@ -50,14 +48,14 @@ public class Accountcontroller {
 
     @GetMapping("signoff")
     public String signoff(Model model) {
-        model.addAttribute("account", new Account());
+        model.addAttribute("account", new AccountDTO());
         model.addAttribute("myList", null);
         model.addAttribute("authenticated", false);
         return "catalog/main";
     }
 
     @GetMapping("editAccountForm")
-    public String editAccountForm(@SessionAttribute("account") Account account , Model model) {
+    public String editAccountForm(@SessionAttribute("account") AccountDTO account , Model model) {
         model.addAttribute("account", account);
         model.addAttribute("LANGUAGE_LIST", LANGUAGE_LIST);
         model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);
@@ -65,36 +63,20 @@ public class Accountcontroller {
     }
 
     @PostMapping("editAccount")
-    public String editAccount(Account account, String repeatedPassword, Model model) {
-        if (account.isPasswordValid(repeatedPassword)) {
-            String msg = "密码不能为空";
-            model.addAttribute("msg", msg);
-            account=null;
-            return "account/edit_account";
-        } else if (!account.getPassword().equals(repeatedPassword)) {
-            String msg = "两次密码不一致";
-            model.addAttribute("msg", msg);
-            account=null;
-            return "account/edit_account";
-        } else {
-            List<Product> myList = accountService.editAccount(account);
-            model.addAttribute("account", account);
-            model.addAttribute("myList", myList);
-            model.addAttribute("authenticated", true);
-            return "redirect:/catalog/view";
-        }
+    public String editAccount(AccountDTO account, String repeatedPassword, Model model) {
+        return accountService.editAccount(account, repeatedPassword, model);
     }
 
     @GetMapping("newAccountForm")
     public String newAccountForm(Model model){
-        model.addAttribute("newAccount",new Account());
+        model.addAttribute("newAccount",new AccountDTO());
         model.addAttribute("LANGUAGE_LIST", LANGUAGE_LIST);
         model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);
         return "account/new_account";
     }
 
     @PostMapping("newAccount")
-    public String newAccount(Account account, String repeatedPassword, Model model) {
+    public String newAccount(AccountDTO account, String repeatedPassword, Model model) {
         return this.accountService.setupAccount(account, repeatedPassword, model);
     }
 }

@@ -1,6 +1,6 @@
 package org.csu.mypetstore.service;
 
-import org.csu.mypetstore.domain.Account;
+import org.csu.mypetstore.dto.AccountDTO;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,5 +18,5 @@ public interface CartService {
 
     String viewCart(Model model);
 
-    String success(Account account, Model model);
+    String success(AccountDTO account, Model model);
 }
