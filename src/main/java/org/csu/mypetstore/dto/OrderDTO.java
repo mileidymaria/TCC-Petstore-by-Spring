@@ -94,6 +94,114 @@ public class OrderDTO {
         this.lineItems = lineItems;
     }
 
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public void setShipAddress1(String shipAddress1) {
+        this.shipAddress1 = shipAddress1;
+    }
+
+    public void setShipAddress2(String shipAddress2) {
+        this.shipAddress2 = shipAddress2;
+    }
+
+    public void setShipCity(String shipCity) {
+        this.shipCity = shipCity;
+    }
+
+    public void setShipState(String shipState) {
+        this.shipState = shipState;
+    }
+
+    public void setShipZip(String shipZip) {
+        this.shipZip = shipZip;
+    }
+
+    public void setShipCountry(String shipCountry) {
+        this.shipCountry = shipCountry;
+    }
+
+    public void setBillAddress1(String billAddress1) {
+        this.billAddress1 = billAddress1;
+    }
+
+    public void setBillAddress2(String billAddress2) {
+        this.billAddress2 = billAddress2;
+    }
+
+    public void setBillCity(String billCity) {
+        this.billCity = billCity;
+    }
+
+    public void setBillState(String billState) {
+        this.billState = billState;
+    }
+
+    public void setBillZip(String billZip) {
+        this.billZip = billZip;
+    }
+
+    public void setBillCountry(String billCountry) {
+        this.billCountry = billCountry;
+    }
+
+    public void setCourier(String courier) {
+        this.courier = courier;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public void setBillToFirstName(String billToFirstName) {
+        this.billToFirstName = billToFirstName;
+    }
+
+    public void setBillToLastName(String billToLastName) {
+        this.billToLastName = billToLastName;
+    }
+
+    public void setShipToFirstName(String shipToFirstName) {
+        this.shipToFirstName = shipToFirstName;
+    }
+
+    public void setShipToLastName(String shipToLastName) {
+        this.shipToLastName = shipToLastName;
+    }
+
+    public void setCreditCard(String creditCard) {
+        this.creditCard = creditCard;
+    }
+
+    public void setExpiryDate(String expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    public void setCardType(String cardType) {
+        this.cardType = cardType;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setLineItems(List<LineItemDTO> lineItems) {
+        this.lineItems = lineItems;
+    }
+
     public int getOrderId() {
         return orderId;
     }

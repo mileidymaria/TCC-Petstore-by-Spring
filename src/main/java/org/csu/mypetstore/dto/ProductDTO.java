@@ -21,6 +21,22 @@ public class ProductDTO{
         this.descriptionText = descriptionText;
     }
 
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public void setDescriptionImage(String descriptionImage) {
         this.descriptionImage = descriptionImage;
     }

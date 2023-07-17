@@ -24,6 +24,34 @@ public class LineItemDTO {
         this.total = total;
     }
 
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
+    public void setLineNumber(int lineNumber) {
+        this.lineNumber = lineNumber;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public void setItem(ItemDTO item) {
+        this.item = item;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+
     public int getOrderId() {
         return orderId;
     }
