@@ -49,10 +49,6 @@ public class LineItem implements Serializable {
         return lineNumber;
     }
 
-    public void setLineNumber(int lineNumber) {
-        this.lineNumber = lineNumber;
-    }
-
     public String getItemId() {
         return itemId;
     }
@@ -63,10 +59,6 @@ public class LineItem implements Serializable {
 
     public BigDecimal getUnitPrice() {
         return unitPrice;
-    }
-
-    public void setUnitPrice(BigDecimal unitprice) {
-        this.unitPrice = unitprice;
     }
 
     public BigDecimal getTotal() {

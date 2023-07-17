@@ -3,9 +3,7 @@ package org.csu.mypetstore.domain;
 public class Sequence {
     private  String name;
     private int nextId;
-    public Sequence(){
 
-    }
     public Sequence(String name,int nextId){
         this.name = name;
         this.nextId = nextId;
@@ -21,9 +19,5 @@ public class Sequence {
 
     public int getNextId() {
         return nextId;
-    }
-
-    public void setNextId(int nextId) {
-        this.nextId = nextId;
     }
 }

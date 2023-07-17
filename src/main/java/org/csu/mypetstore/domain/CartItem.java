@@ -18,18 +18,6 @@ public class CartItem implements Serializable {
         this.inStock = inStock;
     }
 
-    public boolean isInStock() {
-        return inStock;
-    }
-
-    public void setInStock(boolean inStock) {
-        this.inStock = inStock;
-    }
-
-    public BigDecimal getTotal() {
-        return total;
-    }
-
     public Item getItem() {
         return item;
     }

@@ -285,6 +285,7 @@ public class Order {
     public void setLineItems(List<LineItem> lineItems) {
         this.lineItems = lineItems;
     }
+
     public void initOrder(Account account, Cart cart){
         username = account.getUsername();
         orderDate = new Date();
