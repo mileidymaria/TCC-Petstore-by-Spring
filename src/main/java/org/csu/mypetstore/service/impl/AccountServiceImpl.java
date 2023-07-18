@@ -27,6 +27,7 @@ public class AccountServiceImpl implements AccountService {
     private static final String AUTHENTICATED_STR = "authenticated";
     private static final List<String> CATEGORY_LIST;
 
+    @Autowired
     private AccountMapper accountMapper;
 
     static {
