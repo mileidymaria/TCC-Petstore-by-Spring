@@ -1,5 +1,6 @@
 package org.csu.mypetstore.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.csu.mypetstore.utils.Validator;
 
 import java.io.Serializable;
@@ -7,9 +8,17 @@ import java.math.BigDecimal;
 
 public class CartItem implements Serializable {
     private static final long serialVersionUID = 6620528781626504362L;
+
+    @JsonProperty
     private Item item;
+
+    @JsonProperty
     private int quantity;
+
+    @JsonProperty
     private boolean inStock;
+
+    @JsonProperty
     private BigDecimal total;
 
     public CartItem(Item item, int quantity, boolean inStock) {

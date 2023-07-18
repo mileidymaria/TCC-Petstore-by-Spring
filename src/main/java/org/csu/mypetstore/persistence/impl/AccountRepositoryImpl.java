@@ -25,10 +25,7 @@ public class AccountRepositoryImpl implements AccountRepository {
 
     @Override
     public Account get(String username, String password){
-        Account account = new Account();
-        account.setUsername(username);
-        account.setPassword(password);
-        return accountMapper.getAccountByUsernameAndPassword(account);
+        return accountMapper.getAccountByUsernameAndPassword(new Account(username, password));
     }
 
     @Override

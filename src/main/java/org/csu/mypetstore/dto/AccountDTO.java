@@ -1,25 +1,63 @@
 package org.csu.mypetstore.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class AccountDTO {
 
+    @JsonProperty
     private String username;
+
+    @JsonProperty
     private String password;
+
+    @JsonProperty
     private String email;
+
+    @JsonProperty
     private String firstName;
+
+    @JsonProperty
     private String lastName;
+
+    @JsonProperty
     private String status;
+
+    @JsonProperty
     private String address1;
+
+    @JsonProperty
     private String address2;
+
+    @JsonProperty
     private String city;
+
+    @JsonProperty
     private String state;
+
+    @JsonProperty
     private String zip;
+
+    @JsonProperty
     private String country;
+
+    @JsonProperty
     private String phone;
+
+    @JsonProperty
     private String favouriteCategoryId;
+
+    @JsonProperty
     private String languagePreference;
+
+    @JsonProperty
     private boolean listOption;
+
+    @JsonProperty
     private boolean bannerOption;
+
+    @JsonProperty
     private String bannerName;
+
 
     public AccountDTO() {
     }
@@ -42,78 +80,6 @@ public class AccountDTO {
         this.languagePreference = languagePreference;
         this.listOption = listOption;
         this.bannerOption = bannerOption;
-        this.bannerName = bannerName;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public void setAddress1(String address1) {
-        this.address1 = address1;
-    }
-
-    public void setAddress2(String address2) {
-        this.address2 = address2;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public void setZip(String zip) {
-        this.zip = zip;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public void setFavouriteCategoryId(String favouriteCategoryId) {
-        this.favouriteCategoryId = favouriteCategoryId;
-    }
-
-    public void setLanguagePreference(String languagePreference) {
-        this.languagePreference = languagePreference;
-    }
-
-    public void setListOption(boolean listOption) {
-        this.listOption = listOption;
-    }
-
-    public void setBannerOption(boolean bannerOption) {
-        this.bannerOption = bannerOption;
-    }
-
-    public void setBannerName(String bannerName) {
         this.bannerName = bannerName;
     }
 

@@ -6,6 +6,8 @@ import org.csu.mypetstore.domain.CartItem;
 import org.csu.mypetstore.domain.Item;
 import org.csu.mypetstore.domain.Order;
 import org.csu.mypetstore.dto.AccountDTO;
+import org.csu.mypetstore.mapper.AccountMapper;
+import org.csu.mypetstore.mapper.ProductMapper;
 import org.csu.mypetstore.service.AccountService;
 import org.csu.mypetstore.service.CartService;
 import org.csu.mypetstore.service.CatalogService;
@@ -20,26 +22,25 @@ import java.util.Iterator;
 @Service
 public class CartServiceImpl implements CartService {
     @Autowired
-    private final CatalogService catalogService;
+    private CatalogService catalogService;
     @Autowired
-    private final Cart cart;
+    private Cart cart;
     @Autowired
-    private final Order order;
+    private Order order;
 
     @Autowired
-    private final AccountService accountService;
+    private ProductMapper productMapper;
 
-    public CartServiceImpl(CatalogService catalogService, Cart cart, Order order, AccountService accountService) {
-        this.catalogService = catalogService;
-        this.cart = cart;
-        this.order = order;
-        this.accountService = accountService;
-    }
+    @Autowired
+    private AccountMapper accountMapper;
+
+    @Autowired
+    private AccountService accountService;
 
     @Override
     public String addItemToCart(String workingItemId, Model model){
         boolean isInStock = catalogService.isItemInStock(workingItemId);
-        Item item = catalogService.toItem(catalogService.getItem(workingItemId));
+        Item item = productMapper.toItem(catalogService.getItem(workingItemId));
         cart.addItem(item,isInStock, workingItemId);
         model.addAttribute("cart", cart);
         return "cart/cart";
@@ -79,7 +80,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public String success(AccountDTO account, Model model){
         if (!Validator.getSoleInstance().isNull(cart)) {
-            order.initOrder(accountService.toAccount(account), cart);
+            order.initOrder(accountMapper.toAccount(account), cart);
             model.addAttribute("order", order);
         }
         String path = "order/NewOrderForm";

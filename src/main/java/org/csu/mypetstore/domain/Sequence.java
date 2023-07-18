@@ -1,7 +1,12 @@
 package org.csu.mypetstore.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Sequence {
+    @JsonProperty
     private  String name;
+
+    @JsonProperty
     private int nextId;
 
     public Sequence(String name,int nextId){

@@ -37,7 +37,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public Map<String, String> create(Order order){
         Map<String, String> result = new HashMap<>(2);
-        if (Validator.getSoleInstance().isNull(accountRepository.get(order.getUsername()))) {
+        if (Validator.getSoleInstance().isNull(accountRepository.get(order.getAccount().getUsername()))) {
             insertOrder(order);
             result.put("msg", "Thank you, your order has been submitted.");
             result.put("path", "order/ViewOrder");

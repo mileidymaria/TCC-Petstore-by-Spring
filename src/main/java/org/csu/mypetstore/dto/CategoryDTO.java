@@ -1,9 +1,16 @@
 package org.csu.mypetstore.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class CategoryDTO {
 
+    @JsonProperty
     private String categoryId;
+
+    @JsonProperty
     private String name;
+
+    @JsonProperty
     private String description;
 
     public CategoryDTO(String categoryId, String name, String description) {
@@ -13,18 +20,6 @@ public class CategoryDTO {
     }
 
     public CategoryDTO() {
-    }
-
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getCategoryId() {

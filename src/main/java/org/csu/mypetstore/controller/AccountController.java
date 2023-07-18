@@ -15,7 +15,7 @@ import java.util.List;
 @SessionAttributes({"account", "myList", "authenticated"})
 public class AccountController {
     @Autowired
-    private final AccountService accountService;
+    private AccountService accountService;
 
     private static final List<String> LANGUAGE_LIST;
     private static final List<String> CATEGORY_LIST;
@@ -34,10 +34,6 @@ public class AccountController {
         catList.add("BIRDS");
 
         CATEGORY_LIST = Collections.unmodifiableList(catList);
-    }
-
-    public AccountController(AccountService accountService) {
-        this.accountService = accountService;
     }
 
     @GetMapping("signonForm")

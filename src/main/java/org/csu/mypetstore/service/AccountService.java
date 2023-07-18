@@ -14,13 +14,8 @@ public interface AccountService {
 
     String setupAccount(AccountDTO account, String repeatedPassword, Model model);
 
-    /*
-                声明式事务处理
-             */
     @Transactional
     void insertAccount(AccountDTO account);
 
     void updateAccount(AccountDTO account);
-
-    Account toAccount(AccountDTO accountDTO);
 }

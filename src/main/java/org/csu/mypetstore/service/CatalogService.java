@@ -10,8 +10,6 @@ import java.util.List;
 public interface CatalogService {
     CategoryDTO getCategory(String categoryId);
 
-    List<CategoryDTO> getCategoryList();
-
     ProductDTO getProduct(String productId);
 
     List<ProductDTO> getProductListByCategory(String categoryId);
@@ -25,8 +23,4 @@ public interface CatalogService {
     boolean isItemInStock(String itemId);
 
     void updateInventoryQuantity(String itemId, int quantity);
-
-    ItemDTO toItemDTO(Item item);
-
-    Item toItem(ItemDTO item);
 }

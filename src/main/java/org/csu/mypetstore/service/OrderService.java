@@ -16,11 +16,5 @@ public interface OrderService {
 
     String newOrder(HttpServletRequest request, Model model);
 
-    OrderDTO getOrder(int orderId);
-
     List<OrderDTO> getOrdersByUsername(String username);
-
-    int getNextId(String name);
-
-    void confirmOrder(OrderDTO order);
 }

@@ -1,5 +1,7 @@
 package org.csu.mypetstore.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -7,18 +9,43 @@ public class Item implements Serializable {
 
     private static final long serialVersionUID = -2159121673445254631L;
 
+    @JsonProperty
     private String itemId;
+
+    @JsonProperty
     private String productId;
+
+    @JsonProperty
     private BigDecimal listPrice;
+
+    @JsonProperty
     private BigDecimal unitCost;
+
+    @JsonProperty
     private int supplierId;
+
+    @JsonProperty
     private String status;
+
+    @JsonProperty
     private String attribute1;
+
+    @JsonProperty
     private String attribute2;
+
+    @JsonProperty
     private String attribute3;
+
+    @JsonProperty
     private String attribute4;
+
+    @JsonProperty
     private String attribute5;
+
+    @JsonProperty
     private Product product;
+
+    @JsonProperty
     private int quantity;
 
     public Item() {

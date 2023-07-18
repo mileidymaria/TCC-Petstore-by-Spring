@@ -3,6 +3,7 @@ package org.csu.mypetstore.service.impl;
 import org.csu.mypetstore.domain.Account;
 import org.csu.mypetstore.dto.AccountDTO;
 import org.csu.mypetstore.dto.ProductDTO;
+import org.csu.mypetstore.mapper.AccountMapper;
 import org.csu.mypetstore.persistence.AccountRepository;
 import org.csu.mypetstore.service.AccountService;
 import org.csu.mypetstore.service.CatalogService;
@@ -26,6 +27,8 @@ public class AccountServiceImpl implements AccountService {
     private static final String AUTHENTICATED_STR = "authenticated";
     private static final List<String> CATEGORY_LIST;
 
+    private AccountMapper accountMapper;
+
     static {
         List<String> langList = new ArrayList<>();
         langList.add("ENGLISH");
@@ -43,24 +46,18 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Autowired
-    private final AccountRepository accountRepository;
+    private AccountRepository accountRepository;
     @Autowired
-    private final CatalogService catalogService;
-
-    public AccountServiceImpl(AccountRepository accountRepository, CatalogService catalogService) {
-        this.accountRepository = accountRepository;
-        this.catalogService = catalogService;
-    }
-
+    private CatalogService catalogService;
 
     @Override
     public AccountDTO getAccount(String username){
-        return toAccountDTO(accountRepository.get(username));
+        return accountMapper.toAccountDTO(accountRepository.get(username));
     }
 
     @Override
     public String editAccount(AccountDTO accountDTO, String repeatedPassword, Model model) {
-        Account parsedAccount = toAccount(accountDTO);
+        Account parsedAccount = accountMapper.toAccount(accountDTO);
         String msg = null;
         String path = "account/edit_account";
 
@@ -110,7 +107,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public String setupAccount(AccountDTO accountDTO, String repeatedPassword, Model model) {
-        Account parsedAccount = toAccount(accountDTO);
+        Account parsedAccount = accountMapper.toAccount(accountDTO);
         boolean isValid = parsedAccount.isPasswordValid(repeatedPassword);
         boolean isPasswordMismatch = !parsedAccount.getPassword().equals(repeatedPassword);
         boolean isUsernameTaken = !Validator.getSoleInstance().isNull(getAccount(parsedAccount.getUsername()));
@@ -141,63 +138,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    /*
-        声明式事务处理
-     */
     @Transactional
     public void insertAccount(AccountDTO account){
-        accountRepository.create(toAccount(account));
+        accountRepository.create(accountMapper.toAccount(account));
     }
 
     @Override
     public void updateAccount(AccountDTO account){
-        accountRepository.update(toAccount(account));
+        accountRepository.update(accountMapper.toAccount(account));
     }
 
-    @Override
-    public Account toAccount(AccountDTO accountDTO){
-        return new Account(
-                accountDTO.getUsername(),
-                accountDTO.getPassword(),
-                accountDTO.getEmail(),
-                accountDTO.getFirstName(),
-                accountDTO.getLastName(),
-                accountDTO.getStatus(),
-                accountDTO.getAddress1(),
-                accountDTO.getAddress2(),
-                accountDTO.getCity(),
-                accountDTO.getState(),
-                accountDTO.getZip(),
-                accountDTO.getCountry(),
-                accountDTO.getPhone(),
-                accountDTO.getFavouriteCategoryId(),
-                accountDTO.getLanguagePreference(),
-                accountDTO.isListOption(),
-                accountDTO.isBannerOption(),
-                accountDTO.getBannerName()
-        );
-    }
-
-    public AccountDTO toAccountDTO(Account account){
-        return new AccountDTO(
-                account.getUsername(),
-                account.getPassword(),
-                account.getEmail(),
-                account.getFirstName(),
-                account.getLastName(),
-                account.getStatus(),
-                account.getAddress1(),
-                account.getAddress2(),
-                account.getCity(),
-                account.getState(),
-                account.getZip(),
-                account.getCountry(),
-                account.getPhone(),
-                account.getFavouriteCategoryId(),
-                account.getLanguagePreference(),
-                account.isListOption(),
-                account.isBannerOption(),
-                account.getBannerName()
-        );
-    }
 }
