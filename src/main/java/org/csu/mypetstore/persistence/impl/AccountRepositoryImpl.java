@@ -12,11 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AccountRepositoryImpl implements AccountRepository {
 
     @Autowired
-    private final AccountMapper accountMapper;
-
-    public AccountRepositoryImpl(AccountMapper accountMapper) {
-        this.accountMapper = accountMapper;
-    }
+    private AccountMapper accountMapper;
 
     @Override
     public Account get(String username){

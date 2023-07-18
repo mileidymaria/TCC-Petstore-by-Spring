@@ -8,11 +8,8 @@ import java.util.Map;
 public interface OrderRepository {
     Map<String, String> create(Order order);
 
-    Order getOrder(int orderId);
-
     List<Order> getOrdersByUsername(String username);
 
     int getNextId(String name);
 
-    void confirmOrder(Order orderImpl);
 }

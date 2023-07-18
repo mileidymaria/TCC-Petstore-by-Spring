@@ -16,23 +16,15 @@ import java.util.Map;
 
 public class OrderRepositoryImpl implements OrderRepository {
     @Autowired
-    private final ItemMapper itemMapper;
+    private ItemMapper itemMapper;
     @Autowired
-    private final OrderMapper orderMapper;
+    private OrderMapper orderMapper;
     @Autowired
-    private final SequenceMapper sequenceMapper;
+    private SequenceMapper sequenceMapper;
     @Autowired
-    private final LineItemMapper lineItemMapper;
+    private LineItemMapper lineItemMapper;
     @Autowired
-    private final AccountRepository accountRepository;
-
-    public OrderRepositoryImpl(ItemMapper itemMapper, OrderMapper orderMapper, SequenceMapper sequenceMapper, LineItemMapper lineItemMapper, AccountRepository accountRepository) {
-        this.itemMapper = itemMapper;
-        this.orderMapper = orderMapper;
-        this.sequenceMapper = sequenceMapper;
-        this.lineItemMapper = lineItemMapper;
-        this.accountRepository = accountRepository;
-    }
+    private AccountRepository accountRepository;
 
     @Override
     public Map<String, String> create(Order order){
@@ -61,18 +53,6 @@ public class OrderRepositoryImpl implements OrderRepository {
             lineItemMapper.insertLineItem(lineItem);
         });
 
-    }
-
-
-    @Override
-    public Order getOrder(int orderId){
-        Order order = getOrderWithLineItems(orderId);
-
-        for (LineItem lineItem : order.getLineItems()) {
-            populateLineItemWithItem(lineItem);
-        }
-
-        return order;
     }
 
     private Order getOrderWithLineItems(int orderId) {
@@ -105,11 +85,6 @@ public class OrderRepositoryImpl implements OrderRepository {
         int nextId = sequence.getNextId() + 1;
         sequenceMapper.updateSequence(new Sequence(name, nextId));
         return nextId;
-    }
-
-    @Override
-    public void confirmOrder(Order orderImpl){
-        orderMapper.insertOrder(orderImpl);
     }
 
     private void accept(LineItem lineItem) {
