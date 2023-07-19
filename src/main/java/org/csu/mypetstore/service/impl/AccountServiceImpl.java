@@ -7,6 +7,8 @@ import org.csu.mypetstore.mapper.AccountMapper;
 import org.csu.mypetstore.persistence.AccountRepository;
 import org.csu.mypetstore.service.AccountService;
 import org.csu.mypetstore.service.CatalogService;
+import org.csu.mypetstore.utils.Action;
+import org.csu.mypetstore.utils.Observable;
 import org.csu.mypetstore.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,7 @@ import java.util.List;
 
 
 @Service
-public class AccountServiceImpl implements AccountService {
+public class AccountServiceImpl extends Observable implements AccountService {
 
     private static final List<String> LANGUAGE_LIST;
     private static final String ACCOUNT_STR = "account";
@@ -28,7 +30,16 @@ public class AccountServiceImpl implements AccountService {
     private static final List<String> CATEGORY_LIST;
 
     @Autowired
+    private AccountRepository accountRepository;
+    @Autowired
+    private CatalogService catalogService;
+
+    @Autowired
     private AccountMapper accountMapper;
+
+    public AccountServiceImpl (){
+        this.observers.add(accountRepository);
+    }
 
     static {
         List<String> langList = new ArrayList<>();
@@ -45,11 +56,6 @@ public class AccountServiceImpl implements AccountService {
 
         CATEGORY_LIST = Collections.unmodifiableList(catList);
     }
-
-    @Autowired
-    private AccountRepository accountRepository;
-    @Autowired
-    private CatalogService catalogService;
 
     @Override
     public AccountDTO getAccount(String username){
@@ -123,7 +129,7 @@ public class AccountServiceImpl implements AccountService {
         } else if (isUsernameTaken) {
             errorMsg = "用户名已经被注册";
         } else {
-            accountRepository.create(parsedAccount);
+            this.notifyObservers(parsedAccount, Action.CREATE);
             parsedAccount = accountRepository.get(parsedAccount.getUsername());
             model.addAttribute(ACCOUNT_STR, new AccountDTO());
             model.addAttribute(MY_LIST_STR, catalogService.getProductListByCategory(parsedAccount.getFavouriteCategoryId()));
@@ -139,14 +145,13 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @Transactional
     public void insertAccount(AccountDTO account){
-        accountRepository.create(accountMapper.toAccount(account));
+        this.notifyObservers(accountMapper.toAccount(account), Action.CREATE);
     }
 
     @Override
     public void updateAccount(AccountDTO account){
-        accountRepository.update(accountMapper.toAccount(account));
+        this.notifyObservers(accountMapper.toAccount(account), Action.UPDATE);
     }
 
 }

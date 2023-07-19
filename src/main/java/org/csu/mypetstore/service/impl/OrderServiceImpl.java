@@ -10,6 +10,7 @@ import org.csu.mypetstore.persistence.OrderRepository;
 import org.csu.mypetstore.service.AccountService;
 import org.csu.mypetstore.service.CatalogService;
 import org.csu.mypetstore.service.OrderService;
+import org.csu.mypetstore.utils.Observable;
 import org.csu.mypetstore.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class OrderServiceImpl implements OrderService {
+public class OrderServiceImpl extends Observable implements OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
@@ -32,12 +33,6 @@ public class OrderServiceImpl implements OrderService {
     private Cart cart;
 
     @Autowired
-    private AccountService accountService;
-
-    @Autowired
-    private CatalogService catalogService;
-
-    @Autowired
     private OrderMapper orderMapper;
 
     @Autowired
@@ -45,16 +40,22 @@ public class OrderServiceImpl implements OrderService {
 
     private boolean confirmed;
 
-    @Override
-    public String insertOrder(OrderDTO order, Model model) {
-        Map<String, String> result = orderRepository.create(orderMapper.toOrder(order));
-        model.addAttribute("msg", result.get("msg"));
-        return result.get("path");
+    public OrderServiceImpl(){
+        this.observers.add(orderRepository);
     }
 
     @Override
-    public void insertOrder(OrderDTO order) {
-        orderRepository.create(orderMapper.toOrder(order));
+    public String insertOrder(OrderDTO order, Model model) {
+        String path = "";
+        try {
+            this.notifyObservers(orderMapper.toOrder(order));
+            model.addAttribute("msg", "Thank you, your order has been submitted.");
+            path = "order/ViewOrder";
+        } catch (RuntimeException exception) {
+            model.addAttribute("msg", exception.getMessage());
+            path = "common/error";
+        }
+        return path;
     }
 
     @Override
@@ -83,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
             model.addAttribute("order", order);
             path = "order/ConfirmOrder";
         } else if (!Validator.getSoleInstance().isNull(order)) {
-            insertOrder(orderMapper.toOrderDTO(order));
+            this.notifyObservers(orderMapper.toOrderDTO(order));
             model.addAttribute("msg", "Thank you, your order has been submitted.");
             path = "order/ViewOrder";
         } else {

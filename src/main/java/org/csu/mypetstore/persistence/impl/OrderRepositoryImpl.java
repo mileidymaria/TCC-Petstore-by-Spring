@@ -7,6 +7,9 @@ import org.csu.mypetstore.persistence.mapper.ItemMapper;
 import org.csu.mypetstore.persistence.mapper.LineItemMapper;
 import org.csu.mypetstore.persistence.mapper.OrderMapper;
 import org.csu.mypetstore.persistence.mapper.SequenceMapper;
+import org.csu.mypetstore.utils.Action;
+import org.csu.mypetstore.utils.Observable;
+import org.csu.mypetstore.utils.Observer;
 import org.csu.mypetstore.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,19 +28,13 @@ public class OrderRepositoryImpl implements OrderRepository {
     private LineItemMapper lineItemMapper;
     @Autowired
     private AccountRepository accountRepository;
-
-    @Override
-    public Map<String, String> create(Order order){
-        Map<String, String> result = new HashMap<>(2);
+    
+    private void create(Order order){
         if (Validator.getSoleInstance().isNull(accountRepository.get(order.getAccount().getUsername()))) {
             insertOrder(order);
-            result.put("msg", "Thank you, your order has been submitted.");
-            result.put("path", "order/ViewOrder");
-        } else {
-            result.put("msg", "you may only view your own orders.");
-            result.put("path", "common/error");
+            return;
         }
-        return result;
+        throw new RuntimeException("Error! You may only view your own orders.");
     }
 
     private void insertOrder(Order order){
@@ -89,5 +86,11 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     private void accept(LineItem lineItem) {
         itemMapper.updateInventoryQuantity(lineItem.getItemId(), lineItem.getQuantity());
+    }
+
+
+    @Override
+    public void update(Order argument, Action action) {
+        this.create(argument);
     }
 }
