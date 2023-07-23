@@ -28,7 +28,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     private AccountRepository accountRepository;
     
     private void create(Order order){
-        if (Validator.getSoleInstance().isNull(accountRepository.get(order.getUsername()))) {
+        if (!Validator.getSoleInstance().isNull(accountRepository.get(order.getUsername()))) {
             insertOrder(order);
             return;
         }
@@ -36,13 +36,9 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     private void insertOrder(Order order){
-
-
         order.getLineItems().forEach(this::accept);
-
         orderMapper.insertOrder(order);
         orderMapper.insertOrderStatus(order);
-
         order.getLineItems().forEach(lineItem -> {
             lineItem.setOrderId(order.getOrderId());
             lineItemMapper.insertLineItem(lineItem);

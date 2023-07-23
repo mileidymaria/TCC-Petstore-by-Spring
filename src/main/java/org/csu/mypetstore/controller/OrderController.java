@@ -18,8 +18,8 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping("viewOrder")
-    public  String viewOrder(OrderDTO order, Model model){
-        return orderService.insertOrder(order, model);
+    public  String viewOrder(@ModelAttribute("order") OrderDTO order, Model model){
+        return orderService.viewOrder(order, model);
     }
     @RequestMapping("confirm")
     public String newOrder(HttpServletRequest request, Model model){
@@ -27,7 +27,7 @@ public class OrderController {
     }
 
     @RequestMapping("newOrderForm")
-    public String newOrderForm(AccountDTO account, @ModelAttribute("authenticated")boolean authenticated, Model model){
+    public String newOrderForm(@ModelAttribute("account") AccountDTO account, @ModelAttribute("authenticated")boolean authenticated, Model model){
         return orderService.newOrderForm(account, authenticated, model);
     }
     @GetMapping("listOrders")

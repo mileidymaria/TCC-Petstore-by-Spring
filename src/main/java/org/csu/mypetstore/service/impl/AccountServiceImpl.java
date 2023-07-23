@@ -103,7 +103,7 @@ public class AccountServiceImpl extends Observable implements AccountService {
             msg = "Invalid username or password. Signon failed.";
         } else {
             parsedAccount.setPassword(null);
-            model.addAttribute(ACCOUNT_STR, parsedAccount);
+            model.addAttribute(ACCOUNT_STR, accountMapper.toAccountDTO(parsedAccount));
             model.addAttribute(MY_LIST_STR, catalogService.getProductListByCategory(parsedAccount.getFavouriteCategoryId()));
             model.addAttribute(AUTHENTICATED_STR, true);
             path = "catalog/main";

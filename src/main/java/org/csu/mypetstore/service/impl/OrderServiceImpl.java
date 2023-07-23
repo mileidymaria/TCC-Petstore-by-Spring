@@ -6,6 +6,7 @@ import org.csu.mypetstore.dto.OrderDTO;
 import org.csu.mypetstore.parser.AccountParser;
 import org.csu.mypetstore.parser.OrderParser;
 import org.csu.mypetstore.repository.OrderRepository;
+import org.csu.mypetstore.service.AccountService;
 import org.csu.mypetstore.service.OrderService;
 import org.csu.mypetstore.utils.Action;
 import org.csu.mypetstore.utils.Observable;
@@ -34,11 +35,31 @@ public class OrderServiceImpl extends Observable implements OrderService {
     @Autowired
     private AccountParser accountMapper;
 
+    @Autowired
+    private AccountService accountService;
+
     private boolean confirmed;
 
     public OrderServiceImpl(OrderRepository orderRepository){
         this.orderRepository = orderRepository;
         this.observers.add(this.orderRepository);
+    }
+
+    @Override
+    public  String viewOrder(OrderDTO orderDTO, Model model){
+        String path = "";
+        if(accountService.getAccount(orderDTO.getUsername()).getUsername().equals(orderDTO.getUsername())){
+            orderDTO.setOrderId(orderRepository.getNextId("ordernum"));
+            this.notifyObservers(orderMapper.toOrder(orderDTO), Action.CREATE);
+            model.addAttribute("msg","Thank you, your order has been submitted.");
+
+            path = "order/ViewOrder";
+        }else{
+            orderDTO = null;
+            model.addAttribute("msg","you may only view your own orders.");
+            path = "common/error";
+        }
+        return path;
     }
 
     @Override
@@ -74,11 +95,13 @@ public class OrderServiceImpl extends Observable implements OrderService {
     @Override
     public String newOrder(HttpServletRequest request, Model model) {
         String path = "";
+        Account account = (Account) model.getAttribute("account");
         if (!Validator.getSoleInstance().isNull(request.getParameter("shippingAddressRequired"))) {
-            model.addAttribute("order", order);
+            model.addAttribute("order", orderMapper.toOrderDTO(order));
             path = "order/ShippingForm";
         } else if (!confirmed) {
-            model.addAttribute("order", order);
+            order.initOrder(account, cart);
+            model.addAttribute("order", orderMapper.toOrderDTO(order));
             path = "order/ConfirmOrder";
         } else if (!Validator.getSoleInstance().isNull(order)) {
             order.setOrderId(orderRepository.getNextId("ordernum"));

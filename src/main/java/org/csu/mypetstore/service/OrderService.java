@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface OrderService {
+    String viewOrder(OrderDTO orderDTO, Model model);
+
     String insertOrder(OrderDTO order, Model model);
 
     String newOrderForm(AccountDTO account, boolean authenticated, Model model);
