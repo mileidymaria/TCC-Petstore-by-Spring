@@ -81,6 +81,7 @@ public class OrderServiceImpl extends Observable implements OrderService {
             model.addAttribute("order", order);
             path = "order/ConfirmOrder";
         } else if (!Validator.getSoleInstance().isNull(order)) {
+            order.setOrderId(orderRepository.getNextId("ordernum"));
             this.notifyObservers(orderMapper.toOrderDTO(order), Action.CREATE);
             model.addAttribute("msg", "Thank you, your order has been submitted.");
             path = "order/ViewOrder";

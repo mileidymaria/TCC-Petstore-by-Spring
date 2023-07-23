@@ -28,7 +28,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     private AccountRepository accountRepository;
     
     private void create(Order order){
-        if (Validator.getSoleInstance().isNull(accountRepository.get(order.getAccount().getUsername()))) {
+        if (Validator.getSoleInstance().isNull(accountRepository.get(order.getUsername()))) {
             insertOrder(order);
             return;
         }
@@ -36,7 +36,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     private void insertOrder(Order order){
-        order.setOrderId(getNextId("ordernum"));
+
 
         order.getLineItems().forEach(this::accept);
 
@@ -66,7 +66,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public List<Order> getOrdersByUsername(String username){
-        
+
         return orderMapper.getOrdersByUsername(username);
     }
 

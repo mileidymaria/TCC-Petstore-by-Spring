@@ -27,19 +27,37 @@ public class OrderParser {
         return orderDTOList;
     }
 
-    public Order toOrder (OrderDTO order) {
+    public Order toOrder (OrderDTO orderDTO) {
+        List<LineItem> lineItems = toLineItemList(orderDTO.getLineItems());
+
         return new Order(
-                order.getOrderId(),
-                order.getOrderDate(),
-                accountMapper.toAccount(order.getAccountDTO()),
-                order.getCreditCard(),
-                order.getExpiryDate(),
-                order.getCardType(),
-                order.getLocale(),
-                order.getStatus(),
-                order.getCourier(),
-                order.getTotalPrice(),
-                toLineItemList(order.getLineItems())
+                orderDTO.getOrderId(),
+                orderDTO.getUsername(),
+                orderDTO.getOrderDate(),
+                orderDTO.getShipAddress1(),
+                orderDTO.getShipAddress2(),
+                orderDTO.getShipCity(),
+                orderDTO.getShipState(),
+                orderDTO.getShipZip(),
+                orderDTO.getShipCountry(),
+                orderDTO.getBillAddress1(),
+                orderDTO.getBillAddress2(),
+                orderDTO.getBillCity(),
+                orderDTO.getBillState(),
+                orderDTO.getBillZip(),
+                orderDTO.getBillCountry(),
+                orderDTO.getCourier(),
+                orderDTO.getTotalPrice(),
+                orderDTO.getBillToFirstName(),
+                orderDTO.getBillToLastName(),
+                orderDTO.getShipToFirstName(),
+                orderDTO.getShipToLastName(),
+                orderDTO.getCreditCard(),
+                orderDTO.getExpiryDate(),
+                orderDTO.getCardType(),
+                orderDTO.getLocale(),
+                orderDTO.getStatus(),
+                lineItems
         );
     }
 
@@ -66,15 +84,31 @@ public class OrderParser {
     public OrderDTO toOrderDTO (Order order) {
         return new OrderDTO(
                 order.getOrderId(),
+                order.getUsername(),
                 order.getOrderDate(),
-                accountMapper.toAccountDTO(order.getAccount()),
+                order.getShipAddress1(),
+                order.getShipAddress2(),
+                order.getShipCity(),
+                order.getShipState(),
+                order.getShipZip(),
+                order.getShipCountry(),
+                order.getBillAddress1(),
+                order.getBillAddress2(),
+                order.getBillCity(),
+                order.getBillState(),
+                order.getBillZip(),
+                order.getBillCountry(),
+                order.getCourier(),
+                order.getTotalPrice(),
+                order.getBillToFirstName(),
+                order.getBillToLastName(),
+                order.getShipToFirstName(),
+                order.getShipToLastName(),
                 order.getCreditCard(),
                 order.getExpiryDate(),
                 order.getCardType(),
                 order.getLocale(),
                 order.getStatus(),
-                order.getCourier(),
-                order.getTotalPrice(),
                 toLineItemDTOList(order.getLineItems())
         );
     }
