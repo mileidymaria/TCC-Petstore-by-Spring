@@ -1,11 +1,12 @@
-package org.csu.mypetstore.persistence;
+package org.csu.mypetstore.repository;
 
 import org.csu.mypetstore.domain.Order;
 import org.csu.mypetstore.utils.Observer;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
 
+@Component
 public interface OrderRepository extends Observer<Order>{
 
     List<Order> getOrdersByUsername(String username);

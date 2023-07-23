@@ -1,9 +1,10 @@
-package org.csu.mypetstore.persistence.mapper;
+package org.csu.mypetstore.repository.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.csu.mypetstore.domain.Account;
 import org.springframework.stereotype.Repository;
 
-@Repository
+@Mapper
 public interface AccountMapper {
 
     Account getAccountByUsername(String username);

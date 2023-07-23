@@ -23,6 +23,14 @@ public class Cart implements Serializable {
         return itemList.iterator();
     }
 
+    public int getNumberOfItems() {
+        return itemList.size();
+    }
+
+    public Iterator<CartItem> getCartItems() {
+        return itemList.iterator();
+    }
+
     public boolean containsItemId(String itemId) {
         return itemMap.containsKey(itemId);
     }
@@ -38,7 +46,8 @@ public class Cart implements Serializable {
     private void addItem(Item item, boolean isInStock){
         CartItem cartItem = itemMap.get(item.getItemId());
         if (Validator.getSoleInstance().isNull(cartItem)) {
-            itemMap.put(item.getItemId(), new CartItem(item, 0, isInStock));
+            cartItem = new CartItem(item, 0, isInStock);
+            itemMap.put(item.getItemId(), cartItem);
             itemList.add(cartItem);
         }
         cartItem.incrementQuantity();

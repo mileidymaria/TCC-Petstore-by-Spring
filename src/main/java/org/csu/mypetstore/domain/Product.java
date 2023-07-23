@@ -8,22 +8,22 @@ public class Product implements Serializable {
 
     private static final long serialVersionUID = -7492639752670189553L;
 
-    @JsonProperty
+    
     private String productId;
 
-    @JsonProperty
+    
     private String categoryId;
 
-    @JsonProperty
+    
     private String name;
 
-    @JsonProperty
+    
     private String description;
 
-    @JsonProperty
+    
     private String descriptionImage;
 
-    @JsonProperty
+    
     private String descriptionText;
 
     public Product() {

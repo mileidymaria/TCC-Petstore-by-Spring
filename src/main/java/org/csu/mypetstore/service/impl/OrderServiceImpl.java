@@ -2,14 +2,12 @@ package org.csu.mypetstore.service.impl;
 
 import org.csu.mypetstore.domain.*;
 import org.csu.mypetstore.dto.AccountDTO;
-import org.csu.mypetstore.dto.LineItemDTO;
 import org.csu.mypetstore.dto.OrderDTO;
-import org.csu.mypetstore.mapper.AccountMapper;
-import org.csu.mypetstore.mapper.OrderMapper;
-import org.csu.mypetstore.persistence.OrderRepository;
-import org.csu.mypetstore.service.AccountService;
-import org.csu.mypetstore.service.CatalogService;
+import org.csu.mypetstore.parser.AccountParser;
+import org.csu.mypetstore.parser.OrderParser;
+import org.csu.mypetstore.repository.OrderRepository;
 import org.csu.mypetstore.service.OrderService;
+import org.csu.mypetstore.utils.Action;
 import org.csu.mypetstore.utils.Observable;
 import org.csu.mypetstore.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +15,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class OrderServiceImpl extends Observable implements OrderService {
 
     @Autowired
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
     @Autowired
     private Order order;
 
@@ -33,22 +29,23 @@ public class OrderServiceImpl extends Observable implements OrderService {
     private Cart cart;
 
     @Autowired
-    private OrderMapper orderMapper;
+    private OrderParser orderMapper;
 
     @Autowired
-    private AccountMapper accountMapper;
+    private AccountParser accountMapper;
 
     private boolean confirmed;
 
-    public OrderServiceImpl(){
-        this.observers.add(orderRepository);
+    public OrderServiceImpl(OrderRepository orderRepository){
+        this.orderRepository = orderRepository;
+        this.observers.add(this.orderRepository);
     }
 
     @Override
     public String insertOrder(OrderDTO order, Model model) {
         String path = "";
         try {
-            this.notifyObservers(orderMapper.toOrder(order));
+            this.notifyObservers(orderMapper.toOrder(order), Action.CREATE);
             model.addAttribute("msg", "Thank you, your order has been submitted.");
             path = "order/ViewOrder";
         } catch (RuntimeException exception) {
@@ -84,7 +81,7 @@ public class OrderServiceImpl extends Observable implements OrderService {
             model.addAttribute("order", order);
             path = "order/ConfirmOrder";
         } else if (!Validator.getSoleInstance().isNull(order)) {
-            this.notifyObservers(orderMapper.toOrderDTO(order));
+            this.notifyObservers(orderMapper.toOrderDTO(order), Action.CREATE);
             model.addAttribute("msg", "Thank you, your order has been submitted.");
             path = "order/ViewOrder";
         } else {

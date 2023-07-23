@@ -1,15 +1,15 @@
-package org.csu.mypetstore.persistence.impl;
+package org.csu.mypetstore.repository.impl;
 
 import org.csu.mypetstore.domain.Account;
-import org.csu.mypetstore.persistence.AccountRepository;
-import org.csu.mypetstore.persistence.mapper.AccountMapper;
+import org.csu.mypetstore.repository.AccountRepository;
+import org.csu.mypetstore.repository.mapper.AccountMapper;
 import org.csu.mypetstore.utils.Action;
 import org.csu.mypetstore.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+@Component
 public class AccountRepositoryImpl implements AccountRepository {
 
     @Autowired

@@ -3,13 +3,12 @@ package org.csu.mypetstore.service.impl;
 import org.csu.mypetstore.dto.CategoryDTO;
 import org.csu.mypetstore.dto.ItemDTO;
 import org.csu.mypetstore.dto.ProductDTO;
-import org.csu.mypetstore.mapper.ProductMapper;
-import org.csu.mypetstore.persistence.CatalogRepository;
+import org.csu.mypetstore.parser.ProductParser;
+import org.csu.mypetstore.repository.CatalogRepository;
 import org.csu.mypetstore.service.CatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,7 +18,7 @@ public class CatalogServiceImpl implements CatalogService {
     private CatalogRepository catalogRepository;
 
     @Autowired
-    private ProductMapper productMapper;
+    private ProductParser productMapper;
 
     @Override
     public CategoryDTO getCategory(String categoryId) {

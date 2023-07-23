@@ -1,18 +1,18 @@
-package org.csu.mypetstore.persistence.impl;
+package org.csu.mypetstore.repository.impl;
 
 import org.csu.mypetstore.domain.Category;
 import org.csu.mypetstore.domain.Item;
 import org.csu.mypetstore.domain.Product;
-import org.csu.mypetstore.persistence.CatalogRepository;
-import org.csu.mypetstore.persistence.mapper.CategoryMapper;
-import org.csu.mypetstore.persistence.mapper.ItemMapper;
-import org.csu.mypetstore.persistence.mapper.ProductMapper;
+import org.csu.mypetstore.repository.CatalogRepository;
+import org.csu.mypetstore.repository.mapper.CategoryMapper;
+import org.csu.mypetstore.repository.mapper.ItemMapper;
+import org.csu.mypetstore.repository.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Repository
+@Component
 public class CatalogRepositoryImpl implements CatalogRepository {
     @Autowired
     private CategoryMapper categoryMapper;

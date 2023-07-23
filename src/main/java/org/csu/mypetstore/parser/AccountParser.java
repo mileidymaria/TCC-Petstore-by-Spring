@@ -1,11 +1,12 @@
-package org.csu.mypetstore.mapper;
+package org.csu.mypetstore.parser;
 
 import org.csu.mypetstore.domain.Account;
 import org.csu.mypetstore.dto.AccountDTO;
+import org.csu.mypetstore.utils.Validator;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AccountMapper {
+public class AccountParser {
     public Account toAccount(AccountDTO accountDTO){
         return new Account(
                 accountDTO.getUsername(),
@@ -30,7 +31,7 @@ public class AccountMapper {
     }
 
     public AccountDTO toAccountDTO(Account account){
-        return new AccountDTO(
+        return Validator.getSoleInstance().isNull(account) ? null : new AccountDTO(
                 account.getUsername(),
                 account.getPassword(),
                 account.getEmail(),

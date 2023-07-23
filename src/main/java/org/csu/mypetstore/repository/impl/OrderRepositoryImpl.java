@@ -1,22 +1,20 @@
-package org.csu.mypetstore.persistence.impl;
+package org.csu.mypetstore.repository.impl;
 
 import org.csu.mypetstore.domain.*;
-import org.csu.mypetstore.persistence.AccountRepository;
-import org.csu.mypetstore.persistence.OrderRepository;
-import org.csu.mypetstore.persistence.mapper.ItemMapper;
-import org.csu.mypetstore.persistence.mapper.LineItemMapper;
-import org.csu.mypetstore.persistence.mapper.OrderMapper;
-import org.csu.mypetstore.persistence.mapper.SequenceMapper;
+import org.csu.mypetstore.repository.AccountRepository;
+import org.csu.mypetstore.repository.OrderRepository;
+import org.csu.mypetstore.repository.mapper.ItemMapper;
+import org.csu.mypetstore.repository.mapper.LineItemMapper;
+import org.csu.mypetstore.repository.mapper.OrderMapper;
+import org.csu.mypetstore.repository.mapper.SequenceMapper;
 import org.csu.mypetstore.utils.Action;
-import org.csu.mypetstore.utils.Observable;
-import org.csu.mypetstore.utils.Observer;
 import org.csu.mypetstore.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+@Component
 public class OrderRepositoryImpl implements OrderRepository {
     @Autowired
     private ItemMapper itemMapper;
@@ -68,6 +66,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public List<Order> getOrdersByUsername(String username){
+        
         return orderMapper.getOrdersByUsername(username);
     }
 

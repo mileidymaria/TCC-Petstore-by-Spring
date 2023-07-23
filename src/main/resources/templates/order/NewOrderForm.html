@@ -8,7 +8,7 @@
 <body>
 <div th:replace="common/top"></div>
 <div id="Catalog">
-    <form method="post" action="/orderImpl/confirm">
+    <form method="post" action="/order/confirm">
 
         <table>
             <tr>
@@ -17,7 +17,7 @@
             <tr>
                 <td>Card Type:</td>
                 <td>
-                    <select name="orderImpl.cardType">
+                    <select name="order.cardType">
                         <c:forEach  var="cardType" items="${sessionScope.creditCardTypes}">
                             <option>${cardType }</option>
                         </c:forEach>

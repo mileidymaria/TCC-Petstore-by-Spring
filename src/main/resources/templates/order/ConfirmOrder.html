@@ -21,8 +21,8 @@
         <table>
             <tbody>
             <tr>
-                <th align="center" colspan="2"><font size="4"><b th:text="'Order #'+${orderImpl.getOrderId()}">Order</b></font>
-                    <br> <font size="3"><b th:text="${orderImpl.orderDate}"> 2014/03/23 10:46:43</b></font></th>
+                <th align="center" colspan="2"><font size="4"><b th:text="'Order #'+${order.getOrderId()}">Order</b></font>
+                    <br> <font size="3"><b th:text="${order.orderDate}"> 2014/03/23 10:46:43</b></font></th>
             </tr>
 
             <tr>
@@ -30,75 +30,75 @@
             </tr>
             <tr>
                 <td>First name:</td>
-                <td th:text="${orderImpl.billToFirstName}">ABC</td>
+                <td th:text="${order.account.firstName}">ABC</td>
             </tr>
             <tr>
                 <td>Last name:</td>
-                <td  th:text="${orderImpl.billToLastName}">XYX</td>
+                <td  th:text="${order.account.lastName}">XYX</td>
             </tr>
             <tr>
                 <td>Address 1:</td>
-                <td th:text="${orderImpl.billAddress1}">901 San Antonio Road</td>
+                <td th:text="${order.account.address1}">901 San Antonio Road</td>
             </tr>
             <tr>
                 <td>Address 2:</td>
-                <td th:text="${orderImpl.billAddress2}">MS UCUP02-206</td>
+                <td th:text="${order.account.address2}">MS UCUP02-206</td>
             </tr>
             <tr>
                 <td>City:</td>
-                <td th:text="${orderImpl.billCity}">Palo Alto</td>
+                <td th:text="${order.account.city}">Palo Alto</td>
             </tr>
             <tr>
                 <td>State:</td>
-                <td th:text="${orderImpl.billState}">CA</td>
+                <td th:text="${order.account.state}">CA</td>
             </tr>
             <tr>
                 <td>Zip:</td>
-                <td th:text="${orderImpl.billZip}">94303</td>
+                <td th:text="${order.account.zip}">94303</td>
             </tr>
             <tr>
                 <td>Country:</td>
-                <td th:text="${orderImpl.billCountry}">USA</td>
+                <td th:text="${order.account.country}">USA</td>
             </tr>
             <tr>
                 <th colspan="2">Shipping Address</th>
             </tr>
             <tr>
                 <td>First name:</td>
-                <td th:text="${orderImpl.shipToFirstName}">ABC</td>
+                <td th:text="${order.account.firstName}">ABC</td>
             </tr>
             <tr>
                 <td>Last name:</td>
-                <td th:text="${orderImpl.shipToLastName}">XYX</td>
+                <td th:text="${order.account.lastName}">XYX</td>
             </tr>
             <tr>
                 <td>Address 1:</td>
-                <td th:text="${orderImpl.shipAddress1}">901 San Antonio Road</td>
+                <td th:text="${order.account.address1}">901 San Antonio Road</td>
             </tr>
             <tr>
                 <td>Address 2:</td>
-                <td th:text="${orderImpl.shipAddress2}">MS UCUP02-206</td>
+                <td th:text="${order.account.address2}">MS UCUP02-206</td>
             </tr>
             <tr>
                 <td>City:</td>
-                <td th:text="${orderImpl.shipCity}">Palo Alto</td>
+                <td th:text="${order.account.city}">Palo Alto</td>
             </tr>
             <tr>
                 <td>State:</td>
-                <td th:text="${orderImpl.shipState}">CA</td>
+                <td th:text="${order.account.state}">CA</td>
             </tr>
             <tr>
                 <td>Zip:</td>
-                <td th:text="${orderImpl.shipZip}">94303</td>
+                <td th:text="${order.account.zip}">94303</td>
             </tr>
             `<tr>
                 <td>Country:</td>
-                <td th:text="${orderImpl.shipCountry}">USA</td>
+                <td th:text="${order.account.country}">USA</td>
             </tr>
 
             </tbody>
         </table>
-        <a class="Button" href="#" th:href="@{/orderImpl/viewOrder}">Confirm</a>
+        <a class="Button" href="#" th:href="@{/order/viewOrder}">Confirm</a>
     </div>
 </div>
 <footer th:replace="common/bottom">

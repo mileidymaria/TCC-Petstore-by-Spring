@@ -7,58 +7,58 @@ import java.io.Serializable;
 
 public class Account implements Serializable {
     private static final long serialVersionUID = 8751282105532159742L;
-    @JsonProperty
+    
     private String username;
 
-    @JsonProperty
+    
     private String password;
 
-    @JsonProperty
+    
     private String email;
 
-    @JsonProperty
+    
     private String firstName;
 
-    @JsonProperty
+    
     private String lastName;
 
-    @JsonProperty
+    
     private String status;
 
-    @JsonProperty
+    
     private String address1;
 
-    @JsonProperty
+    
     private String address2;
 
-    @JsonProperty
+    
     private String city;
 
-    @JsonProperty
+    
     private String state;
 
-    @JsonProperty
+    
     private String zip;
 
-    @JsonProperty
+    
     private String country;
 
-    @JsonProperty
+    
     private String phone;
 
-    @JsonProperty
+    
     private String favouriteCategoryId;
 
-    @JsonProperty
+    
     private String languagePreference;
 
-    @JsonProperty
+    
     private boolean listOption;
 
-    @JsonProperty
+    
     private boolean bannerOption;
 
-    @JsonProperty
+    
     private String bannerName;
 
     public Account() {
@@ -108,8 +108,8 @@ public class Account implements Serializable {
     }
 
     public boolean isPasswordValid(String repeatedPassword){
-        return Validator.getSoleInstance().isNull(repeatedPassword)
-                || Validator.getSoleInstance().isLengthEqualTo(repeatedPassword, 0);
+        return !Validator.getSoleInstance().isNull(repeatedPassword)
+                && !Validator.getSoleInstance().isLengthEqualTo(repeatedPassword, 0);
     }
 
     public void setPassword(String password) {

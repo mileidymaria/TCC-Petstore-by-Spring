@@ -11,6 +11,10 @@ public abstract class Observable<O extends Observer, A> {
         this.observers = new ArrayList<>(3);
     }
 
+    protected void addObserver(O observer){
+        this.observers.add(observer);
+    }
+
     @SuppressWarnings("unchecked")
     public void notifyObservers(A argument, Action action) {
         observers.forEach(observer -> observer.update(argument, action));

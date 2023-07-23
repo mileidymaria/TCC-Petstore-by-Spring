@@ -1,4 +1,4 @@
-package org.csu.mypetstore.mapper;
+package org.csu.mypetstore.parser;
 
 import org.csu.mypetstore.domain.LineItem;
 import org.csu.mypetstore.domain.Order;
@@ -11,13 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class OrderMapper {
+public class OrderParser {
 
     @Autowired
-    private AccountMapper accountMapper;
+    private AccountParser accountMapper;
 
     @Autowired
-    private ProductMapper productMapper;
+    private ProductParser productMapper;
 
     public List<OrderDTO> toOrderDTOList (List<Order> orderList){
         List<OrderDTO> orderDTOList = new ArrayList<>();

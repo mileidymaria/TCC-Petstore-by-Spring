@@ -9,25 +9,25 @@ import java.math.BigDecimal;
 
 public class LineItem implements Serializable {
     private static final long serialVersionUID = 6804536240033522156L;
-    @JsonProperty
+    
     private int orderId;
 
-    @JsonProperty
+    
     private int lineNumber;
 
-    @JsonProperty
+    
     private int quantity;
 
-    @JsonProperty
+    
     private String itemId;
 
-    @JsonProperty
+    
     private BigDecimal unitPrice;
 
-    @JsonProperty
+    
     private Item item;
 
-    @JsonProperty
+    
     private BigDecimal total;
 
     public LineItem() {
@@ -49,6 +49,22 @@ public class LineItem implements Serializable {
         this.itemId = cartItem.getItem().getItemId();
         this.unitPrice = cartItem.getItem().getListPrice();
         this.item = cartItem.getItem();
+    }
+
+    public void setLineNumber(int lineNumber) {
+        this.lineNumber = lineNumber;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
     }
 
     public int getOrderId() {

@@ -8,44 +8,18 @@ import java.math.BigDecimal;
 public class Item implements Serializable {
 
     private static final long serialVersionUID = -2159121673445254631L;
-
-    @JsonProperty
     private String itemId;
-
-    @JsonProperty
     private String productId;
-
-    @JsonProperty
     private BigDecimal listPrice;
-
-    @JsonProperty
     private BigDecimal unitCost;
-
-    @JsonProperty
     private int supplierId;
-
-    @JsonProperty
     private String status;
-
-    @JsonProperty
     private String attribute1;
-
-    @JsonProperty
     private String attribute2;
-
-    @JsonProperty
     private String attribute3;
-
-    @JsonProperty
     private String attribute4;
-
-    @JsonProperty
     private String attribute5;
-
-    @JsonProperty
     private Product product;
-
-    @JsonProperty
     private int quantity;
 
     public Item() {
@@ -121,5 +95,53 @@ public class Item implements Serializable {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public void setListPrice(BigDecimal listPrice) {
+        this.listPrice = listPrice;
+    }
+
+    public void setUnitCost(BigDecimal unitCost) {
+        this.unitCost = unitCost;
+    }
+
+    public void setSupplierId(int supplierId) {
+        this.supplierId = supplierId;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setAttribute1(String attribute1) {
+        this.attribute1 = attribute1;
+    }
+
+    public void setAttribute2(String attribute2) {
+        this.attribute2 = attribute2;
+    }
+
+    public void setAttribute3(String attribute3) {
+        this.attribute3 = attribute3;
+    }
+
+    public void setAttribute4(String attribute4) {
+        this.attribute4 = attribute4;
+    }
+
+    public void setAttribute5(String attribute5) {
+        this.attribute5 = attribute5;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

@@ -55,7 +55,7 @@ public class AccountController {
     }
 
     @GetMapping("editAccountForm")
-    public String editAccountForm(@SessionAttribute("account") AccountDTO account , Model model) {
+    public String editAccountForm(@SessionAttribute("account") @ModelAttribute AccountDTO account , Model model) {
         model.addAttribute("account", account);
         model.addAttribute("LANGUAGE_LIST", LANGUAGE_LIST);
         model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);
@@ -63,20 +63,20 @@ public class AccountController {
     }
 
     @PostMapping("editAccount")
-    public String editAccount(AccountDTO account, String repeatedPassword, Model model) {
+    public String editAccount(@ModelAttribute AccountDTO account, String repeatedPassword, Model model) {
         return accountService.editAccount(account, repeatedPassword, model);
     }
 
     @GetMapping("newAccountForm")
     public String newAccountForm(Model model){
-        model.addAttribute("newAccount",new AccountDTO());
+        model.addAttribute("newAccount", new AccountDTO());
         model.addAttribute("LANGUAGE_LIST", LANGUAGE_LIST);
         model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);
         return "account/new_account";
     }
 
     @PostMapping("newAccount")
-    public String newAccount(AccountDTO account, String repeatedPassword, Model model) {
+    public String newAccount(@ModelAttribute AccountDTO account, String repeatedPassword, Model model) {
         return this.accountService.setupAccount(account, repeatedPassword, model);
     }
 }

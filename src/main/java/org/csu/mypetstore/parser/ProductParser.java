@@ -1,4 +1,4 @@
-package org.csu.mypetstore.mapper;
+package org.csu.mypetstore.parser;
 
 import org.csu.mypetstore.domain.Category;
 import org.csu.mypetstore.domain.Item;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ProductMapper {
+public class ProductParser {
     public List<ProductDTO> toProductDTOList(List<Product> productList){
         List<ProductDTO> productDTOList = new ArrayList<>();
         for(Product product : productList){

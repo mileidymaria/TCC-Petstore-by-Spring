@@ -10,37 +10,37 @@ import java.util.Iterator;
 import java.util.List;
 @Component
 public class Order {
-    @JsonProperty
+    
     private int orderId;
 
-    @JsonProperty
+    
     private Date orderDate;
 
-    @JsonProperty
+    
     private Account account;
 
-    @JsonProperty
+    
     private String creditCard;
 
-    @JsonProperty
+    
     private String expiryDate;
 
-    @JsonProperty
+    
     private String cardType;
 
-    @JsonProperty
+    
     private String locale;
 
-    @JsonProperty
+    
     private String status;
 
-    @JsonProperty
+    
     private String courier;
 
-    @JsonProperty
+    
     private BigDecimal totalPrice;
 
-    @JsonProperty
+    
     private List<LineItem> lineItems = new ArrayList<>();
 
     public Order() {

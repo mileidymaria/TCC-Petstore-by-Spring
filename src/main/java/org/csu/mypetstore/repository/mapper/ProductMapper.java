@@ -1,11 +1,12 @@
-package org.csu.mypetstore.persistence.mapper;
+package org.csu.mypetstore.repository.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.csu.mypetstore.domain.Product;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+@Mapper
 public interface ProductMapper {
 
     List<Product> getProductListByCategory(String categoryId);

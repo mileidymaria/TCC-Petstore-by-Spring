@@ -31,9 +31,9 @@
 
         <tr>
 
-            <th align="center" colspan="2" th:text="'Order' + ${session.orderImpl.orderId} +
+            <th align="center" colspan="2" th:text="'Order' + ${session.order.orderId} +
 
-                 ${#dates.format(session.orderImpl.orderDate, 'yyyy/MM/dd hh:mm:ss')}">
+                 ${#dates.format(session.order.orderDate, 'yyyy/MM/dd hh:mm:ss')}">
 
             </th>
 
@@ -49,7 +49,7 @@
 
             <td>Card Type:</td>
 
-            <td th:text="${session.orderImpl.cardType}"></td>
+            <td th:text="${session.order.cardType}"></td>
 
         </tr>
 
@@ -57,14 +57,14 @@
 
             <td>Card Number:</td>
 
-            <td th:text="${session.orderImpl.creditCard} + ' * Fake number!'"></td>
+            <td th:text="${session.order.creditCard} + ' * Fake number!'"></td>
 
         </tr>
         <tr>
 
             <td>Expiry Date (MM/YYYY):</td>
 
-            <td th:text="${session.orderImpl.expiryDate}"></td>
+            <td th:text="${session.order.expiryDate}"></td>
 
         </tr>
 
@@ -78,7 +78,7 @@
 
             <td>First name:</td>
 
-            <td th:text="${session.orderImpl.billToFirstName}"></td>
+            <td th:text="${session.order.billToFirstName}"></td>
 
         </tr>
 
@@ -86,7 +86,7 @@
 
             <td>Last name:</td>
 
-            <td th:text="${session.orderImpl.billToLastName}"></td>
+            <td th:text="${session.order.billToLastName}"></td>
 
         </tr>
 
@@ -94,7 +94,7 @@
 
             <td>Address 1:</td>
 
-            <td th:text="${session.orderImpl.billAddress1}"></td>
+            <td th:text="${session.order.billAddress1}"></td>
 
         </tr>
 
@@ -102,7 +102,7 @@
 
             <td>Address 2:</td>
 
-            <td th:text="${session.orderImpl.billAddress2}"></td>
+            <td th:text="${session.order.billAddress2}"></td>
 
         </tr>
 
@@ -110,7 +110,7 @@
 
             <td>City:</td>
 
-            <td th:text="${session.orderImpl.billCity}"></td>
+            <td th:text="${session.order.billCity}"></td>
 
         </tr>
 
@@ -118,7 +118,7 @@
 
             <td>State:</td>
 
-            <td th:text="${session.orderImpl.billState}"></td>
+            <td th:text="${session.order.billState}"></td>
 
         </tr>
 
@@ -126,14 +126,14 @@
 
             <td>Zip:</td>
 
-            <td th:text="${session.orderImpl.billZip}"></td>
+            <td th:text="${session.order.billZip}"></td>
 
         </tr>
 
         <tr>
             <td>Country:</td>
 
-            <td th:text="${session.orderImpl.billCountry}"></td>
+            <td th:text="${session.order.billCountry}"></td>
 
         </tr>
 
@@ -147,7 +147,7 @@
 
             <td>First name:</td>
 
-            <td th:text="${session.orderImpl.shipToFirstName}"></td>
+            <td th:text="${session.order.shipToFirstName}"></td>
 
         </tr>
 
@@ -155,7 +155,7 @@
 
             <td>Last name:</td>
 
-            <td th:text="${session.orderImpl.shipToLastName}"></td>
+            <td th:text="${session.order.shipToLastName}"></td>
 
         </tr>
 
@@ -163,7 +163,7 @@
 
             <td>Address 1:</td>
 
-            <td th:text="${session.orderImpl.shipAddress1}"></td>
+            <td th:text="${session.order.shipAddress1}"></td>
 
         </tr>
 
@@ -171,7 +171,7 @@
 
             <td>Address 2:</td>
 
-            <td th:text="${session.orderImpl.shipAddress2}"></td>
+            <td th:text="${session.order.shipAddress2}"></td>
 
         </tr>
 
@@ -179,7 +179,7 @@
 
             <td>City:</td>
 
-            <td th:text="${session.orderImpl.shipCity}"></td>
+            <td th:text="${session.order.shipCity}"></td>
 
         </tr>
 
@@ -187,14 +187,14 @@
 
             <td>State:</td>
 
-            <td th:text="${session.orderImpl.shipState}"></td>
+            <td th:text="${session.order.shipState}"></td>
 
         </tr>
         <tr>
 
             <td>Zip:</td>
 
-            <td th:text="${session.orderImpl.shipZip}"></td>
+            <td th:text="${session.order.shipZip}"></td>
 
         </tr>
 
@@ -202,7 +202,7 @@
 
             <td>Country:</td>
 
-            <td th:text="${session.orderImpl.shipCountry}"></td>
+            <td th:text="${session.order.shipCountry}"></td>
 
         </tr>
 
@@ -210,13 +210,13 @@
 
             <td>Courier:</td>
 
-            <td th:text="${session.orderImpl.courier}"></td>
+            <td th:text="${session.order.courier}"></td>
 
         </tr>
 
         <tr>
 
-            <td colspan="2" th:text="'Status:' + ${session.orderImpl.status}"></td>
+            <td colspan="2" th:text="'Status:' + ${session.order.status}"></td>
 
         </tr>
 
@@ -241,7 +241,7 @@
                     </tr>
 
 
-                    <tr th:each="lineItem : ${session.orderImpl.lineItems}">
+                    <tr th:each="lineItem : ${session.order.lineItems}">
 
                         <td>
 
@@ -288,7 +288,7 @@
 
                         <th colspan="5"
 
-                            th:text="'Total: ' + ${#numbers.formatDecimal(session.orderImpl.totalPrice, 1, 2)}"></th>
+                            th:text="'Total: ' + ${#numbers.formatDecimal(session.order.totalPrice, 1, 2)}"></th>
 
                     </tr>
 

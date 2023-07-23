@@ -36,17 +36,17 @@
         </tr>
 
 
-        <tr th:each="orderImpl : ${session.orderList}">
+        <tr th:each="order : ${session.orderList}">
 
             <td>
 
-                <a th:href="@{/orderImpl/viewOrder(orderId=${orderImpl.orderId})}" th:text="${orderImpl.orderId}"></a>
+                <a th:href="@{/order/viewOrder(orderId=${order.orderId})}" th:text="${order.orderId}"></a>
 
             </td>
 
-            <td th:text="${#dates.format(orderImpl.orderDate, 'yyyy/MM/dd hh:mm:ss')}"></td>
+            <td th:text="${#dates.format(order.orderDate, 'yyyy/MM/dd hh:mm:ss')}"></td>
 
-            <td th:text="${#numbers.formatDecimal(orderImpl.totalPrice, 1, 2)}"></td>
+            <td th:text="${#numbers.formatDecimal(order.totalPrice, 1, 2)}"></td>
 
         </tr>
 

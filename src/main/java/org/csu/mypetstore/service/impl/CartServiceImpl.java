@@ -6,8 +6,8 @@ import org.csu.mypetstore.domain.CartItem;
 import org.csu.mypetstore.domain.Item;
 import org.csu.mypetstore.domain.Order;
 import org.csu.mypetstore.dto.AccountDTO;
-import org.csu.mypetstore.mapper.AccountMapper;
-import org.csu.mypetstore.mapper.ProductMapper;
+import org.csu.mypetstore.parser.AccountParser;
+import org.csu.mypetstore.parser.ProductParser;
 import org.csu.mypetstore.service.AccountService;
 import org.csu.mypetstore.service.CartService;
 import org.csu.mypetstore.service.CatalogService;
@@ -29,10 +29,10 @@ public class CartServiceImpl implements CartService {
     private Order order;
 
     @Autowired
-    private ProductMapper productMapper;
+    private ProductParser productMapper;
 
     @Autowired
-    private AccountMapper accountMapper;
+    private AccountParser accountMapper;
 
     @Autowired
     private AccountService accountService;
@@ -84,16 +84,19 @@ public class CartServiceImpl implements CartService {
             model.addAttribute("order", order);
         }
         String path = "order/NewOrderForm";
-        Iterator<CartItem> cartItems = cart.getAllCartItems();
+        Iterator<CartItem> cartItems = this.cart.getAllCartItems();
         while (cartItems.hasNext()) {
-            String itemId = cartItems.next().getItem().getItemId();
-            catalogService.updateInventoryQuantity(itemId, cartItems.next().getQuantity());
+            CartItem cartItem = cartItems.next();
+            String itemId = cartItem.getItem().getItemId();
+            catalogService.updateInventoryQuantity(itemId, cartItem.getQuantity());
             Item item = cart.removeItemById(itemId);
             model.addAttribute("cart", cart);
 
             if (Validator.getSoleInstance().isNull(item)) {
                 model.addAttribute("msg", "Please do it again");
                 path = "common/error";
+            } else {
+                break;
             }
         }
 

@@ -3,8 +3,8 @@ package org.csu.mypetstore.service.impl;
 import org.csu.mypetstore.domain.Account;
 import org.csu.mypetstore.dto.AccountDTO;
 import org.csu.mypetstore.dto.ProductDTO;
-import org.csu.mypetstore.mapper.AccountMapper;
-import org.csu.mypetstore.persistence.AccountRepository;
+import org.csu.mypetstore.parser.AccountParser;
+import org.csu.mypetstore.repository.AccountRepository;
 import org.csu.mypetstore.service.AccountService;
 import org.csu.mypetstore.service.CatalogService;
 import org.csu.mypetstore.utils.Action;
@@ -12,7 +12,6 @@ import org.csu.mypetstore.utils.Observable;
 import org.csu.mypetstore.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import java.util.ArrayList;
@@ -30,15 +29,16 @@ public class AccountServiceImpl extends Observable implements AccountService {
     private static final List<String> CATEGORY_LIST;
 
     @Autowired
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
     @Autowired
     private CatalogService catalogService;
 
     @Autowired
-    private AccountMapper accountMapper;
+    private AccountParser accountMapper;
 
-    public AccountServiceImpl (){
-        this.observers.add(accountRepository);
+    public AccountServiceImpl (AccountRepository accountRepository){
+        this.accountRepository = accountRepository;
+        addObserver(this.accountRepository);
     }
 
     static {
@@ -134,13 +134,14 @@ public class AccountServiceImpl extends Observable implements AccountService {
             model.addAttribute(ACCOUNT_STR, new AccountDTO());
             model.addAttribute(MY_LIST_STR, catalogService.getProductListByCategory(parsedAccount.getFavouriteCategoryId()));
             model.addAttribute(AUTHENTICATED_STR, true);
-            model.addAttribute("newAccount", new Account());
+            model.addAttribute("newAccount", new AccountDTO());
             model.addAttribute("LANGUAGE_LIST", LANGUAGE_LIST);
             model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);
             path = "account/signon";
         }
 
         model.addAttribute("msg", errorMsg);
+        System.out.println(model);
         return path;
     }
 

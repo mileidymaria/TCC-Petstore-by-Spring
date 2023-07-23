@@ -1,11 +1,13 @@
-package org.csu.mypetstore.persistence;
+package org.csu.mypetstore.repository;
 
 import org.csu.mypetstore.domain.Category;
 import org.csu.mypetstore.domain.Item;
 import org.csu.mypetstore.domain.Product;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public interface CatalogRepository {
     Category getCategory(String categoryId);
 

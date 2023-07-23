@@ -4,22 +4,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ProductDTO{
 
-    @JsonProperty
+    
     private String productId;
 
-    @JsonProperty
+    
     private String categoryId;
 
-    @JsonProperty
+    
     private String name;
 
-    @JsonProperty
+    
     private String description;
 
-    @JsonProperty
+    
     private String descriptionImage;
 
-    @JsonProperty
+    
     private String descriptionText;
     public ProductDTO() {
     }
@@ -31,6 +31,22 @@ public class ProductDTO{
         this.description = description;
         this.descriptionImage = descriptionImage;
         this.descriptionText = descriptionText;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setDescriptionImage(String descriptionImage) {

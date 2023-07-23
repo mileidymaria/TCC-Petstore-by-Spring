@@ -1,11 +1,12 @@
-package org.csu.mypetstore.persistence.mapper;
+package org.csu.mypetstore.repository.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.csu.mypetstore.domain.Item;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+@Mapper
 public interface ItemMapper {
     void updateInventoryQuantity(String itemId,int quantity);
 

@@ -9,16 +9,16 @@ import java.math.BigDecimal;
 public class CartItem implements Serializable {
     private static final long serialVersionUID = 6620528781626504362L;
 
-    @JsonProperty
+    
     private Item item;
 
-    @JsonProperty
+    
     private int quantity;
 
-    @JsonProperty
+    
     private boolean inStock;
 
-    @JsonProperty
+    
     private BigDecimal total;
 
     public CartItem(Item item, int quantity, boolean inStock) {
@@ -46,14 +46,29 @@ public class CartItem implements Serializable {
     }
 
     public void incrementQuantity() {
-        quantity++;
+        this.quantity++;
         calculateTotal();
     }
 
     private void calculateTotal() {
-        total = Validator.getSoleInstance().isNull(item)
+        this.total = !Validator.getSoleInstance().isNull(item)
                 && !Validator.getSoleInstance().isNull(item.getListPrice()) ?
                 item.getListPrice().multiply(new BigDecimal(quantity)) : null;
     }
 
+    public void setInStock(boolean inStock) {
+        this.inStock = inStock;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+
+    public boolean isInStock() {
+        return inStock;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
 }
