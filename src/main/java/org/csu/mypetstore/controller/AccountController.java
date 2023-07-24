@@ -55,7 +55,7 @@ public class AccountController {
     }
 
     @GetMapping("editAccountForm")
-    public String editAccountForm(@SessionAttribute("account") @ModelAttribute AccountDTO account , Model model) {
+    public String editAccountForm(@SessionAttribute("account") AccountDTO account , Model model) {
         model.addAttribute("account", account);
         model.addAttribute("LANGUAGE_LIST", LANGUAGE_LIST);
         model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);

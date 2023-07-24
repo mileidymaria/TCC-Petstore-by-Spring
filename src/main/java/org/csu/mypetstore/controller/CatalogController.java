@@ -25,63 +25,21 @@ public class CatalogController {
 
     @GetMapping("viewCategory")
     public String viewCategory(String categoryId, Model model) {
-        if (categoryId != null) {
-            List<ProductDTO> productList = catalogService.getProductListByCategory(categoryId);
-            CategoryDTO category = catalogService.getCategory(categoryId);
-            model.addAttribute("productList", productList);
-            model.addAttribute("category", category);
-        }
-        return "catalog/category";
+        return catalogService.viewCategory(categoryId, model);
     }
 
     @GetMapping("viewProduct")
     public String viewProduct(String productId, Model model) {
-        if (productId != null) {
-            List<ItemDTO> itemList = catalogService.getItemListByProduct(productId);
-            ProductDTO product = catalogService.getProduct(productId);
-            model.addAttribute("product", product);
-            model.addAttribute("itemList", itemList);
-        }
-        return "catalog/product";
+        return catalogService.viewProduct(productId, model);
     }
 
     @GetMapping("viewItem")
     public String viewItem(String itemId, Model model) {
-        if(itemId!=null) {
-            ItemDTO item = catalogService.getItem(itemId);
-            ProductDTO product = item.getProduct();
-            processProductDescription(product);
-            model.addAttribute("item",item);
-            model.addAttribute("product",product);
-        }
-        return "catalog/item";
+        return catalogService.getItem(itemId, model);
     }
 
     @PostMapping("searchProducts")
     public String searchProducts(String keyword, Model model){
-        if(isKeywordValid(keyword)){
-            model.addAttribute("msg","Please enter a keyword to search for, then press the search button.");
-            return "common/error";
-        }
-        List<ProductDTO> productList = catalogService.searchProductList(keyword.toLowerCase());
-        processProductDescription(productList);
-        model.addAttribute("productList",productList);
-        return "catalog/search_products";
-    }
-
-    private boolean isKeywordValid(String keyword){
-        return keyword == null || keyword.length() < 1;
-    }
-
-    private void processProductDescription(ProductDTO product){
-        String [] temp = product.getDescription().split("\"");
-        product.setDescriptionImage(temp[1]);
-        product.setDescriptionText(temp[2].substring(1));
-    }
-
-    private void processProductDescription(List<ProductDTO> productList){
-        for(ProductDTO product : productList) {
-            processProductDescription(product);
-        }
+        return catalogService.searchProducts(keyword, model);
     }
 }

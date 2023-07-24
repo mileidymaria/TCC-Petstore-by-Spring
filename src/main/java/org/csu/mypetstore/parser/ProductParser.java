@@ -21,6 +21,14 @@ public class ProductParser {
         return productDTOList;
     }
 
+    public List<Product> toProductList(List<ProductDTO> productList){
+        List<Product> productDTOList = new ArrayList<>();
+        for(ProductDTO product : productList){
+            productDTOList.add(toProduct(product));
+        }
+        return productDTOList;
+    }
+
     public ProductDTO toProductDTO(Product product){
         return new ProductDTO(
                 product.getProductId(),

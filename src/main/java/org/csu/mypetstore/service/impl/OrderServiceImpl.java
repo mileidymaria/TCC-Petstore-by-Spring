@@ -63,20 +63,6 @@ public class OrderServiceImpl extends Observable implements OrderService {
     }
 
     @Override
-    public String insertOrder(OrderDTO order, Model model) {
-        String path = "";
-        try {
-            this.notifyObservers(orderMapper.toOrder(order), Action.CREATE);
-            model.addAttribute("msg", "Thank you, your order has been submitted.");
-            path = "order/ViewOrder";
-        } catch (RuntimeException exception) {
-            model.addAttribute("msg", exception.getMessage());
-            path = "common/error";
-        }
-        return path;
-    }
-
-    @Override
     public String newOrderForm(AccountDTO account, boolean authenticated, Model model) {
         String path = "";
         if (Validator.getSoleInstance().isNull(account) || !authenticated) {

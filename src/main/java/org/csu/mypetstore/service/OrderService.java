@@ -10,8 +10,6 @@ import java.util.List;
 public interface OrderService {
     String viewOrder(OrderDTO orderDTO, Model model);
 
-    String insertOrder(OrderDTO order, Model model);
-
     String newOrderForm(AccountDTO account, boolean authenticated, Model model);
 
     String newOrder(HttpServletRequest request, Model model);
